@@ -1,0 +1,94 @@
+@startuml
+
+entity "Utilisateur" as Utilisateur {
+    + id_utilisateur [PK]
+    --
+    nom
+    prenom
+    email
+    mot_de_passe
+    role
+}
+
+entity "Entreprise" as Entreprise {
+    + id_entreprise [PK]
+    --
+    nom
+    secteur
+    localisation
+    description
+    note
+}
+
+entity "Etudiant" as Etudiant {
+    + id_etudiant [PK]
+    --
+    id_utilisateur [FK]
+    mineure
+}
+
+entity "Candidature" as Candidature {
+    + id_candidature [PK]
+    --
+    id_etudiant [FK]
+    id_offre [FK]
+    date_candidature
+    cv
+    lettre_motivation
+}
+
+
+entity "Favoris" as Favoris {
+    + id_favoris [PK]
+    --
+    id_etudiant [FK]
+    id_offre [FK]
+}
+
+entity "OffreStage" as OffreStage {
+    + id_offre [PK]
+    --
+    id_entreprise [FK]
+    id_pilote [FK]
+    id_admin [FK]
+    titre
+    description
+    competence
+    mineure
+    base_remuneration
+    date_debut
+    date_fin
+    nombre_candidatures
+}
+
+entity "PilotePromotion" as PilotePromotion {
+    + id_pilote [PK]
+    --
+    id_utilisateur [FK]
+}
+
+entity "Administrateur" as Administrateur {
+    + id_admin [PK]
+    --
+    id_utilisateur [FK]
+}
+
+' Relations entre entités
+Utilisateur ||--o{ Etudiant : "1,1"
+Utilisateur ||--o{ PilotePromotion : "1,1"
+Utilisateur ||--o{ Administrateur : "1,1"
+
+Etudiant ||--o{ Candidature : "0,N"
+Etudiant ||--o{ Favoris : "0,N"
+Candidature }|--|| OffreStage : "N,1"
+Favoris }|--|| OffreStage : "N,1"
+
+OffreStage ||--o{ PilotePromotion : "1,N"
+OffreStage ||--o{ Administrateur : "1,N"
+OffreStage }|--|| Entreprise : "N,1" 
+
+Administrateur ||--o{ Entreprise : "1,N"
+PilotePromotion ||--o{ Entreprise : "1,N"
+
+@enduml
+
