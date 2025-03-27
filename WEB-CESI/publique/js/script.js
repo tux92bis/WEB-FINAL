@@ -53,3 +53,29 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+/*suppression d'une offre*/
+function supprimerOffre() {
+    const confirmation = confirm("Voulez-vous vraiment supprimer cette offre ?");
+    if (confirmation) {
+      alert("Offre supprimée !");
+    }
+      
+}
+/*gratification*/
+const stars = document.querySelectorAll('.star');
+const note = document.getElementById('note');
+
+stars.forEach((star, index) => {
+  star.addEventListener('click', () => {
+    // Active les étoiles jusqu'à celle cliquée
+    stars.forEach((s, i) => {
+      s.classList.toggle('favori-active', i <= index);
+    });
+
+    // Affiche la note
+    note.textContent = `Vous avez donné une note de ${index + 1} / 4`;
+  });
+});
+
+
+
