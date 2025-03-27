@@ -341,7 +341,7 @@ html, body {
 
 .filtres {
   position: relative;
-  top: 75px;
+  top: -220px;
 }
 
 .offres {
@@ -353,7 +353,7 @@ html, body {
   width: 70%;
   height: auto;
   position: relative;
-  top: -276px;
+  top: -830px;
   left: 90px;
   
 }
@@ -498,7 +498,7 @@ html, body {
   margin-left: 18px;
   padding-left: 10px;
   position: relative;
-  top: -60px;
+  top: -310px;
   background: white;
   border: #c0b4b4;
   border-radius: 8px;
@@ -641,7 +641,7 @@ html, body {
   margin-top: -165px;
   padding-top: 10px;
   position: absolute;
-  top: -210px;
+  top: 169px;
   left: 71px;
 }
 

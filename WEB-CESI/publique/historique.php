@@ -64,22 +64,18 @@
       <h1>storique</h1>
       <div class="offre-card">
         <div class="offre-title">Développeur Web</div>
-        <div class="offre-info">ID de l'offre : 12345</div>
         <div class="offre-info">Date de postulation : 27/03/2025</div>
       </div>
       <div class="offre-card">
         <div class="offre-title">Développeur Web</div>
-        <div class="offre-info">ID de l'offre : 12345</div>
         <div class="offre-info">Date de postulation : 27/03/2025</div>
       </div>
       <div class="offre-card">
         <div class="offre-title">Développeur Web</div>
-        <div class="offre-info">ID de l'offre : 12345</div>
         <div class="offre-info">Date de postulation : 27/03/2025</div>
       </div>
       <div class="offre-card">
         <div class="offre-title">Développeur Web</div>
-        <div class="offre-info">ID de l'offre : 12345</div>
         <div class="offre-info">Date de postulation : 27/03/2025</div>
       </div>
   </section>
