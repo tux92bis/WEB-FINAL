@@ -1,4 +1,14 @@
-<!DOCTYPE html>
+<?php
+
+session_start();
+
+if (!isset($_SESSION['user'])) {
+  header('Location: index.php');
+  exit();
+}
+
+?>
+
 <html lang="fr" data-wf-page="67bc967e0972095bf8851d61" data-wf-site="67b49e8f9c9f8a910dad1bec">
 
 <head>

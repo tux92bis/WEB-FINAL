@@ -1,39 +1,45 @@
-
 <?php
 require_once __DIR__ . '/../config/BDD.php';
 require_once __DIR__ . '/../modèles/offreStage.php';
+require_once __DIR__ . '/../modèles/entreprise.php';
+require_once __DIR__ . '/../modèles/favoris.php';
 
 session_start();
 
-$bdd = connexionBDD();
+if (!isset($_SESSION['user'])) {
+  header('Location: index.php');
+  exit();
+}
+
+$filtres = [];
+
 $offreModel = new OffreStage($bdd);
+$entrepriseModel = new Entreprise($bdd);
+$favorisModel = new Favoris($bdd);
 
-$filtres = [
-    'search' => $_GET['search'] ?? '',
-    'type' => $_GET['type'] ?? '',
-    'remuneration' => $_GET['remuneration'] ?? '',
-    'domaine' => $_GET['domaine'] ?? []
-];
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    if (!empty($_GET['search'])) $filtres['search'] = $_GET['search'];
+    if (!empty($_GET['Type'])) $filtres['type'] = $_GET['Type'];
+    if (!empty($_GET['base_rémunération'])) $filtres['remuneration'] = $_GET['base_rémunération'];
+    if (!empty($_GET['domaine'])) $filtres['domaine'] = (array)$_GET['domaine'];
+}
 
-$offres = $offreModel->offresFiltrees($filtres);
-
+$offres = $offreModel->OffresFiltrees($filtres, $_SESSION['utilisateur']['id']);
 ?>
 
-
+<!DOCTYPE html>
 <html lang="fr" data-wf-page="67b49e8f9c9f8a910dad1bf7" data-wf-site="67b49e8f9c9f8a910dad1bec">
 
 <head>
   <meta charset="utf-8">
   <title>Stage-Horizon</title>
   <meta content="width=device-width, initial-scale=1" name="viewport">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <link href="css/normalize.css" rel="stylesheet" type="text/css">
   <link href="css/style.css" rel="stylesheet" type="text/css">
   <link href="css/stage-horizon.css" rel="stylesheet" type="text/css">
-  <script>!function (o, c) { var n = c.documentElement, t = " w-mod-"; n.className += t + "js", ("ontouchstart" in o || o.DocumentTouch && c instanceof DocumentTouch) && (n.className += t + "touch") }(window, document);</script>
-  <img src="/images/logo-site.png" loading="lazy" width="100" sizes="(max-width: 479px) 71vw, 112.99479675292969px"
-    alt="" srcset="images/logo-site-p-500.png 500w, images/logo-site.png 577w">
+  <script>
+    !function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);
+  </script>
 </head>
 
 <body class="body">
@@ -41,12 +47,10 @@ $offres = $offreModel->offresFiltrees($filtres);
     <div data-animation="default" data-collapse="all" data-duration="400" data-easing="ease" data-easing2="ease"
       role="banner" class="navbar w-nav">
       <a href="#" class="w-nav-brand">
-        <img src="/images/logo-site.png" loading="lazy" width="100"
-          sizes="(max-width: 479px) 71vw, 112.99479675292969px" alt=""
-          srcset="images/logo-site-p-500.png 500w, /images/logo-site.png 577w">
+        <img src="images/logo-site.png" loading="lazy" width="100" sizes="(max-width: 479px) 71vw, 112.99479675292969px" 
+             alt="" srcset="images/logo-site-p-500.png 500w, images/logo-site.png 577w">
       </a>
       <div class="menu w-container">
-
         <nav class="navigation">
           <a href="accueil.php" aria-current="page" class="a w--current">Accueil</a>
           <a href="favoris.php" class="favoris">Favoris</a>
@@ -60,165 +64,111 @@ $offres = $offreModel->offresFiltrees($filtres);
               <div>Compte</div>
             </div>
             <nav class="w-dropdown-list">
-              <a href="creer-offre.php" class="dropdown-link w-dropdown-link">Ajouter une entreprise</a>
-              <a href="candidature.php" class="dropdown-link-2 w-dropdown-link">Ajouter un utilisateur</a>
-              <a href="creer-offre2.php" class="dropdown-link-3 w-dropdown-link">Ajouter une offre</a>
+              <?php if ($_SESSION['user']['role'] === 'admin'): ?>
+                <a href="creer-offre.php" class="dropdown-link w-dropdown-link">Ajouter une entreprise</a>
+                <a href="ajout-utilisateur.php" class="dropdown-link-2 w-dropdown-link">Ajouter un utilisateur</a>
+                <a href="creer-offre.php" class="dropdown-link-3 w-dropdown-link">Ajouter une offre</a>
+              <?php endif; ?>
             </nav>
-          </div><img src="images/generic-avatar.svg" loading="lazy" width="36" alt="" class="image">
+          </div>
+          <img src="images/generic-avatar.svg" loading="lazy" width="36" alt="" class="image">
         </div>
       </div>
     </div>
   </header>
+
   <section class="bandeau">
-    <h1 class="slogan"> Votre avenir commence ici !</h1>
+    <h1 class="slogan">Votre avenir commence ici !</h1>
     <div class="search-bar-container">
-      <form id="search-form" method="get" action="#">
-        <input type="text" id="search" name="search" placeholder="Rechercher..." class="search-input">
+      <form method="get" action="">
+        <input type="text" name="search" placeholder="Rechercher..." class="search-input" 
+               value="<?= htmlspecialchars($_GET['search'] ?? '') ?>">
         <button type="submit" class="search-button">🔍</button>
       </form>
     </div>
   </section>
-  <div class="w-layout-vflex flex-block"></div>
-  <aside class="filtres w-form">
-    <form id="email-form" name="email-form" data-name="Email Form" method="get" class="form"
-      data-wf-page-id="67b49e8f9c9f8a910dad1bf7" data-wf-element-id="2d372f55-fc3f-5eaf-7a6d-1992c8428c09">
 
+  <aside class="filtres w-form">
+    <form method="get" class="form">
       <h4>Filtrer les offres</h4>
       <div class="price-slider">
-        <label for="priceRange">Gratification :</label>
-        <div class="price-display"><span id="priceValue">500</span> €</div>
-        <input type="range" id="priceRange" min="0" max="1000" value="500" step="10">
+        <label for="base_rémunération">Gratification :</label>
+        <div class="price-display"><span id="priceValue"><?= $_GET['base_rémunération'] ?? 500 ?></span> €</div>
+        <input type="range" id="base_rémunération" name="base_rémunération" min="0" max="1000" 
+               value="<?= $_GET['base_rémunération'] ?? 500 ?>" step="10">
       </div>
 
-      <!-- Boutons radio -->
       <fieldset>
         <legend>Type de contrat</legend>
+        <?php $currentType = $_GET['Type'] ?? ''; ?>
         <label class="w-radio">
-          <input type="radio" id="radio-alternance" name="Type" class="w-form-formradioinput w-radio-input"
-            value="Alternance">
-          <span class="w-form-label">Alternance</span>
+          <input type="radio" name="Type" value="Alternance" <?= $currentType === 'Alternance' ? 'checked' : '' ?>> Alternance
         </label>
-
         <label class="w-radio">
-          <input type="radio" id="radio-stage" name="Type" class="w-form-formradioinput w-radio-input" value="Stage">
-          <span class="w-form-label">Stage</span>
+          <input type="radio" name="Type" value="Stage" <?= $currentType === 'Stage' ? 'checked' : '' ?>> Stage
         </label>
       </fieldset>
 
-      <!-- Cases à cocher -->
       <fieldset>
         <legend>Domaines</legend>
+        <?php 
+        $domaines = ['BTP', 'S3E', 'Informatique', 'Généraliste'];
+        $selectedDomaines = isset($_GET['domaine']) ? (array)$_GET['domaine'] : [];
+        foreach ($domaines as $domaine): 
+        ?>
         <label class="w-checkbox">
-          <input type="checkbox" id="checkbox-btp" name="checkbox-btp"
-            class="w-form-formcheckboxinput w-checkbox-input">
-          <span class="w-form-label">BTP</span>
+          <input type="checkbox" name="domaine[]" value="<?= $domaine ?>" 
+                 <?= in_array($domaine, $selectedDomaines) ? 'checked' : '' ?>> <?= $domaine ?>
         </label>
-
-        <label class="w-checkbox">
-          <input type="checkbox" id="checkbox-s3e" name="checkbox-s3e"
-            class="w-form-formcheckboxinput w-checkbox-input">
-          <span class="w-form-label">S3E</span>
-        </label>
-
-        <label class="w-checkbox">
-          <input type="checkbox" id="checkbox-informatique" name="checkbox-informatique"
-            class="w-form-formcheckboxinput w-checkbox-input">
-          <span class="w-form-label">Informatique</span>
-        </label>
-
-        <label class="w-checkbox">
-          <input type="checkbox" id="checkbox-generaliste" name="checkbox-generaliste"
-            class="w-form-formcheckboxinput w-checkbox-input">
-          <span class="w-form-label">Généraliste</span>
-        </label>
+        <?php endforeach; ?>
       </fieldset>
 
+      <button type="submit" class="apply-filters">Appliquer les filtres</button>
+      <?php if (!empty($_GET)): ?>
+        <a href="accueil.php" class="reset-filters">Réinitialiser</a>
+      <?php endif; ?>
     </form>
   </aside>
 
+  <div class="w-layout-layout offres wf-layout-layout">
+    <?php foreach ($offres as $offre): 
+      $entreprise = $entrepriseModel->avoirParID($offre['id_entreprise']);
+    ?>
+    <div class="w-layout-cell cell">
+      <h2 class="heading-2"><?= htmlspecialchars($entreprise['nom']) ?></h2>
+      <img src="images/bandeau-offre.png" loading="lazy" alt="" class="image-5">
+      <h3><?= htmlspecialchars($offre['titre']) ?></h3>
+      <p class="paragraph"><?= htmlspecialchars($offre['description']) ?></p>
+      
+      <div class="offre-details">
+        <p><strong>Type:</strong> <?= htmlspecialchars($offre['type']) ?></p>
+        <p><strong>Rémunération:</strong> <?= $offre['base_remuneration'] ?>€</p>
+        <p><strong>Durée:</strong> <?= $offre['duree'] ?> mois</p>
+        <p><strong>Domaine:</strong> <?= htmlspecialchars($offre['mineure']) ?></p>
+      </div>
 
-  <div id="w-node-_38b87cf2-cd7e-10d0-1a13-de02a947c1bc-0dad1bf7" class="w-layout-layout offres wf-layout-layout">
-    <div class="w-layout-cell cell">
-      <h2 class="heading-2">Entreprise</h2><img src="images/bandeau-offre.png" loading="lazy" alt="" class="image-5">
-      <p class="paragraph">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros
-        elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero
-        vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique
-        posuere.</p>
-      <a href="#" class="button-2 w-button">Postuler</a>
-      <input type="checkbox" id="checkbox" />
+      <a href="postuler.php?id=<?= $offre['id_offre'] ?>" class="button-2 w-button">Postuler</a>
+      
+      <?php if ($_SESSION['user']['role'] === 'admin'): ?>
       <div class="modifsupp">
-        <a href="/modifier-offre">Modifier l'offre</a>
-        <button onclick="supprimerOffre()">Supprimer l'offre</button>
+        <a href="modifier-offre.php?id=<?= $offre['id_offre'] ?>">Modifier</a>
+        <form method="post" action="supprimer-offre.php" style="display:inline;">
+          <input type="hidden" name="id_offre" value="<?= $offre['id_offre'] ?>">
+          <button type="submit" class="btn-supprimer">Supprimer</button>
+        </form>
       </div>
-      <label for="checkbox" class="toggle">
-        <div class="bars" id="bar1"></div>
-        <div class="bars" id="bar2"></div>
-        <div class="bars" id="bar3"></div>
-      </label>
-      <button class="favoris-btn">☆</button>
-      <img src="images/generic-avatar.svg" loading="lazy" width="37" alt="" class="image-4">
+      <?php endif; ?>
+
+      <form method="post" action="ajouterFavori.php" style="display:inline;">
+        <input type="hidden" name="id_offre" value="<?= $offre['id_offre'] ?>">
+        <button type="submit" class="favoris-btn">
+          <?= $offre['est_favori'] ? '★' : '☆' ?>
+        </button>
+      </form>
     </div>
-    <div class="w-layout-cell cell">
-      <h2 class="heading-2">Entreprise</h2><img src="images/bandeau-offre.png" loading="lazy" alt="" class="image-5">
-      <p class="paragraph">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros
-        elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero
-        vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique
-        posuere.</p>
-      <a href="#" class="button-2 w-button">Postuler</a>
-      <input type="checkbox" id="checkbox1" />
-      <div class="modifsupp">
-        <a href="/modifier-offre">Modifier l'offre</a>
-        <button onclick="supprimerOffre()">Supprimer l'offre</button>
-      </div>
-      <label for="checkbox1" class="toggle">
-        <div class="bars" id="bar1"></div>
-        <div class="bars" id="bar2"></div>
-        <div class="bars" id="bar3"></div>
-      </label>
-      <button class="favoris-btn">☆</button>
-      <img src="images/generic-avatar.svg" loading="lazy" width="37" alt="" class="image-4">
-    </div>
-    <div class="w-layout-cell cell">
-      <h2 class="heading-2">Entreprise</h2><img src="images/bandeau-offre.png" loading="lazy" alt="" class="image-5">
-      <p class="paragraph">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros
-        elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero
-        vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique
-        posuere.</p>
-      <a href="offre.html" class="button-2 w-button">Postuler</a>
-      <input type="checkbox" id="checkbox2" />
-      <div class="modifsupp">
-        <a href="/modifier-offre">Modifier l'offre</a>
-        <button onclick="supprimerOffre()">Supprimer l'offre</button>
-      </div>
-      <label for="checkbox2" class="toggle">
-        <div class="bars" id="bar1"></div>
-        <div class="bars" id="bar2"></div>
-        <div class="bars" id="bar3"></div>
-      </label>
-      <button class="favoris-btn">☆</button>
-      <img src="images/generic-avatar.svg" loading="lazy" width="37" alt="" class="image-4">
-    </div>
-    <div class="w-layout-cell cell">
-      <h2 class="heading-2">Entreprise</h2><img src="images/bandeau-offre.png" loading="lazy" alt="" class="image-5">
-      <p class="paragraph">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros
-        elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero
-        vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique
-        posuere.</p>
-      <a href="#" class="button-2 w-button">Postuler</a>
-      <input type="checkbox" id="checkbox3" />
-      <div class="modifsupp">
-        <a href="/modifier-offre">Modifier l'offre</a>
-        <button onclick="supprimerOffre()">Supprimer l'offre</button>
-      </div>
-      <label for="checkbox3" class="toggle">
-        <div class="bars" id="bar1"></div>
-        <div class="bars" id="bar2"></div>
-        <div class="bars" id="bar3"></div>
-      </label>
-      <button class="favoris-btn">☆</button>
-      <img src="images/generic-avatar.svg" loading="lazy" width="37" alt="" class="image-4">
-    </div>
+    <?php endforeach; ?>
   </div>
+
   <div class="pagination">
     <a href="#">&laquo;</a>
     <a href="#">1</a>
@@ -229,14 +179,32 @@ $offres = $offreModel->offresFiltrees($filtres);
     <a href="#">6</a>
     <a href="#">&raquo;</a>
   </div>
+
   <footer class="pied-de-page">
-    <div class="w-layout-hflex contacts"><img src="images/instagram.svg" loading="lazy" alt="" class="instagram"><img
-        src="images/twitter.svg" loading="lazy" alt="" class="twitter"><img src="images/linkedin.svg" loading="lazy"
-        alt="" class="linkedin"><img src="images/facebook.svg" loading="lazy" alt="" class="facebook"><img
-        src="images/youtube.svg" loading="lazy" alt="" class="image-2"></div>
+    <div class="w-layout-hflex contacts">
+      <img src="images/instagram.svg" loading="lazy" alt="" class="instagram">
+      <img src="images/twitter.svg" loading="lazy" alt="" class="twitter">
+      <img src="images/linkedin.svg" loading="lazy" alt="" class="linkedin">
+      <img src="images/facebook.svg" loading="lazy" alt="" class="facebook">
+      <img src="images/youtube.svg" loading="lazy" alt="" class="image-2">
+    </div>
     <div class="mention-l-gales">© 2025 StageHorizon | Inc. Tous droits réservés CGU</div>
   </footer>
-  <script src="js/script.js" defer></script>
-</body>
 
+  <script>
+    const priceSlider = document.getElementById('base_rémunération');
+    const priceValue = document.getElementById('priceValue');
+    
+    priceSlider.addEventListener('input', function() {
+      priceValue.textContent = this.value;
+    }); 
+    document.querySelectorAll('.btn-supprimer').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        if (!confirm('Voulez-vous vraiment supprimer cette offre ?')) {
+          e.preventDefault();
+        }
+      });
+    });
+  </script>
+</body>
 </html>
