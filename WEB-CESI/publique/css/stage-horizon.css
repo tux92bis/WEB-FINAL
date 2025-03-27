@@ -845,7 +845,7 @@ html, body {
 .image-30 {
   width: 100%;
   position:relative;
-  top:30px;
+  top:54px;
 }
 
 .objectifs {
@@ -1054,9 +1054,9 @@ html, body {
 }
 
 .localisation {
-  position:relative;
+  position:absolute;
   bottom: 44px;
-  top:12px;
+  top: 33px;
   left: 720px;
 }
 
