@@ -1,5 +1,6 @@
+
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-wf-page="67b49e8f9c9f8a910dad1bf7" data-wf-site="67b49e8f9c9f8a910dad1bec">
 
 <head>
   <meta charset="utf-8">
@@ -12,7 +13,7 @@
   <link href="css/stage-horizon.css" rel="stylesheet" type="text/css">
   <script>!function (o, c) { var n = c.documentElement, t = " w-mod-"; n.className += t + "js", ("ontouchstart" in o || o.DocumentTouch && c instanceof DocumentTouch) && (n.className += t + "touch") }(window, document);</script>
   <img src="/images/logo-site.png" loading="lazy" width="100" sizes="(max-width: 479px) 71vw, 112.99479675292969px"
-    alt="" srcset="/images/logo-site-p-500.png 500w, /images/logo-site.png 577w">
+    alt="" srcset="images/logo-site-p-500.png 500w, images/logo-site.png 577w">
 </head>
 
 <body class="body">
@@ -22,15 +23,14 @@
       <a href="#" class="w-nav-brand">
         <img src="/images/logo-site.png" loading="lazy" width="100"
           sizes="(max-width: 479px) 71vw, 112.99479675292969px" alt=""
-          srcset="/images/logo-site-p-500.png 500w, /images/logo-site.png 577w">
+          srcset="images/logo-site-p-500.png 500w, /images/logo-site.png 577w">
       </a>
       <div class="menu w-container">
 
         <nav class="navigation">
           <a href="accueil.html" aria-current="page" class="a w--current">Accueil</a>
           <a href="favoris.html" class="favoris">Favoris</a>
-          <a href="offre.html" class="favoris">Offres de stage</a>
-          <a href="candidature.html" class="favoris">Candidatures</a>
+          <a href="historique.html" class="favoris">Candidatures</a>
           <a href="entreprise.html" class="favoris">Entreprises</a>
         </nav>
         <div class="w-nav-button">
@@ -40,9 +40,9 @@
               <div> Compte</div>
             </div>
             <nav class="w-dropdown-list">
-              <a href="creer-offre.html" class="dropdown-link w-dropdown-link">Ajouter une offre</a>
-              <a href="candidature2.html" class="dropdown-link-2 w-dropdown-link">Ajouter un utilisateur</a>
-              <a href="creer-offre2.html" class="dropdown-link-3 w-dropdown-link">Ajouter une entreprise</a>
+              <a href="creer-offre.html" class="dropdown-link w-dropdown-link">Ajouter une entreprise</a>
+              <a href="candidature.html" class="dropdown-link-2 w-dropdown-link">Ajouter un utilisateur</a>
+              <a href="creer-offre2.html" class="dropdown-link-3 w-dropdown-link">Ajouter une offre</a>
             </nav>
           </div><img src="images/generic-avatar.svg" loading="lazy" width="36" alt="" class="image">
         </div>
@@ -64,6 +64,11 @@
       data-wf-page-id="67b49e8f9c9f8a910dad1bf7" data-wf-element-id="2d372f55-fc3f-5eaf-7a6d-1992c8428c09">
 
       <h4>Filtrer les offres</h4>
+      <div class="price-slider">
+        <label for="priceRange">Gratification :</label>
+        <div class="price-display"><span id="priceValue">500</span> €</div>
+        <input type="range" id="priceRange" min="0" max="1000" value="500" step="10">
+      </div>
 
       <!-- Boutons radio -->
       <fieldset>
@@ -120,14 +125,16 @@
         vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique
         posuere.</p>
       <a href="#" class="button-2 w-button">Postuler</a>
-      <!-- From Uiverse.io by Jimdrer -->
       <input type="checkbox" id="checkbox" />
+      <div class="modifsupp">
+        <a href="/modifier-offre">Modifier l'offre</a>
+        <button onclick="supprimerOffre()">Supprimer l'offre</button>
+      </div>
       <label for="checkbox" class="toggle">
         <div class="bars" id="bar1"></div>
         <div class="bars" id="bar2"></div>
         <div class="bars" id="bar3"></div>
       </label>
-
       <button class="favoris-btn">☆</button>
       <img src="images/generic-avatar.svg" loading="lazy" width="37" alt="" class="image-4">
     </div>
@@ -138,6 +145,16 @@
         vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique
         posuere.</p>
       <a href="#" class="button-2 w-button">Postuler</a>
+      <input type="checkbox" id="checkbox1" />
+      <div class="modifsupp">
+        <a href="/modifier-offre">Modifier l'offre</a>
+        <button onclick="supprimerOffre()">Supprimer l'offre</button>
+      </div>
+      <label for="checkbox1" class="toggle">
+        <div class="bars" id="bar1"></div>
+        <div class="bars" id="bar2"></div>
+        <div class="bars" id="bar3"></div>
+      </label>
       <button class="favoris-btn">☆</button>
       <img src="images/generic-avatar.svg" loading="lazy" width="37" alt="" class="image-4">
     </div>
@@ -148,6 +165,16 @@
         vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique
         posuere.</p>
       <a href="offre.html" class="button-2 w-button">Postuler</a>
+      <input type="checkbox" id="checkbox2" />
+      <div class="modifsupp">
+        <a href="/modifier-offre">Modifier l'offre</a>
+        <button onclick="supprimerOffre()">Supprimer l'offre</button>
+      </div>
+      <label for="checkbox2" class="toggle">
+        <div class="bars" id="bar1"></div>
+        <div class="bars" id="bar2"></div>
+        <div class="bars" id="bar3"></div>
+      </label>
       <button class="favoris-btn">☆</button>
       <img src="images/generic-avatar.svg" loading="lazy" width="37" alt="" class="image-4">
     </div>
@@ -158,6 +185,16 @@
         vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique
         posuere.</p>
       <a href="#" class="button-2 w-button">Postuler</a>
+      <input type="checkbox" id="checkbox3" />
+      <div class="modifsupp">
+        <a href="/modifier-offre">Modifier l'offre</a>
+        <button onclick="supprimerOffre()">Supprimer l'offre</button>
+      </div>
+      <label for="checkbox3" class="toggle">
+        <div class="bars" id="bar1"></div>
+        <div class="bars" id="bar2"></div>
+        <div class="bars" id="bar3"></div>
+      </label>
       <button class="favoris-btn">☆</button>
       <img src="images/generic-avatar.svg" loading="lazy" width="37" alt="" class="image-4">
     </div>
