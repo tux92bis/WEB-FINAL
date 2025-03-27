@@ -1,5 +1,25 @@
 
-<!DOCTYPE html>
+<?php
+require_once __DIR__ . '/../config/BDD.php';
+require_once __DIR__ . '/../modèles/offreStage.php';
+
+session_start();
+
+$bdd = connexionBDD();
+$offreModel = new OffreStage($bdd);
+
+$filtres = [
+    'search' => $_GET['search'] ?? '',
+    'type' => $_GET['type'] ?? '',
+    'remuneration' => $_GET['remuneration'] ?? '',
+    'domaine' => $_GET['domaine'] ?? []
+];
+
+$offres = $offreModel->offresFiltrees($filtres);
+
+?>
+
+
 <html lang="fr" data-wf-page="67b49e8f9c9f8a910dad1bf7" data-wf-site="67b49e8f9c9f8a910dad1bec">
 
 <head>
@@ -28,21 +48,21 @@
       <div class="menu w-container">
 
         <nav class="navigation">
-          <a href="accueil.html" aria-current="page" class="a w--current">Accueil</a>
-          <a href="favoris.html" class="favoris">Favoris</a>
-          <a href="historique.html" class="favoris">Candidatures</a>
-          <a href="entreprise.html" class="favoris">Entreprises</a>
+          <a href="accueil.php" aria-current="page" class="a w--current">Accueil</a>
+          <a href="favoris.php" class="favoris">Favoris</a>
+          <a href="historique.php" class="favoris">Candidatures</a>
+          <a href="entreprise.php" class="favoris">Entreprises</a>
         </nav>
         <div class="w-nav-button">
           <div data-hover="false" data-delay="50" class="w-dropdown">
             <div class="compte w-dropdown-toggle">
               <div class="w-icon-dropdown-toggle"></div>
-              <div> Compte</div>
+              <div>Compte</div>
             </div>
             <nav class="w-dropdown-list">
-              <a href="creer-offre.html" class="dropdown-link w-dropdown-link">Ajouter une entreprise</a>
-              <a href="candidature.html" class="dropdown-link-2 w-dropdown-link">Ajouter un utilisateur</a>
-              <a href="creer-offre2.html" class="dropdown-link-3 w-dropdown-link">Ajouter une offre</a>
+              <a href="creer-offre.php" class="dropdown-link w-dropdown-link">Ajouter une entreprise</a>
+              <a href="candidature.php" class="dropdown-link-2 w-dropdown-link">Ajouter un utilisateur</a>
+              <a href="creer-offre2.php" class="dropdown-link-3 w-dropdown-link">Ajouter une offre</a>
             </nav>
           </div><img src="images/generic-avatar.svg" loading="lazy" width="36" alt="" class="image">
         </div>

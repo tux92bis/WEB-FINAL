@@ -25,11 +25,11 @@
       <div class="menu w-container">
 
         <nav  class="navigation">
-          <a href="accueil.html" aria-current="page" class="a w--current">Accueil</a>
-          <a href="favoris.html" class="favoris">Favoris</a>
-          <a href="offre.html" class="favoris">Offres de stage</a>
-          <a href="candidature.html" class="favoris">Candidatures</a>
-          <a href="entreprise.html" class="favoris">Entreprises</a>
+          <a href="accueil.php" aria-current="page" class="a w--current">Accueil</a>
+          <a href="favoris.php" class="favoris">Favoris</a>
+          <a href="offre.php" class="favoris">Offres de stage</a>
+          <a href="candidature.php" class="favoris">Candidatures</a>
+          <a href="entreprise.php" class="favoris">Entreprises</a>
         </nav>
         <div  class="w-nav-button">
           <div data-hover="false" data-delay="50" class="w-dropdown">
@@ -38,9 +38,9 @@
               <div> Compte</div>
             </div>
             <nav class="w-dropdown-list">
-              <a href="creer-offre.html" class="dropdown-link w-dropdown-link">Ajouter une offre</a>
-              <a href="candidature2.html" class="dropdown-link-2 w-dropdown-link">Ajouter un utilisateur</a>
-              <a href="creer-offre2.html" class="dropdown-link-3 w-dropdown-link">Ajouter une entreprise</a>
+              <a href="creer-offre.php" class="dropdown-link w-dropdown-link">Ajouter une offre</a>
+              <a href="candidature2.php" class="dropdown-link-2 w-dropdown-link">Ajouter un utilisateur</a>
+              <a href="creer-offre2.php" class="dropdown-link-3 w-dropdown-link">Ajouter une entreprise</a>
             </nav>
           </div><img src="images/generic-avatar.svg" loading="lazy" width="36" alt="" class="image">
         </div>
