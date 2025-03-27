@@ -55,44 +55,54 @@
       </div>
     </div>
   </header>
-  
   <section class="bandeau">
     <h1 class="slogan">Votre avenir commence ici !</h1>
 
   </section>
-  <div class="contenu">
-   
-    <h1>Historique</h1>
-    <ul>
-
-    </ul>
-    <ul>
-
-    </ul>
-    <ul>
-
-    </ul>
-
-  </div>
-  
-
-
+  <section>
+    <div class="contenu">
+      <h1>storique</h1>
+      <div class="offre-card">
+        <div class="offre-title">Développeur Web</div>
+        <div class="offre-info">ID de l'offre : 12345</div>
+        <div class="offre-info">Date de postulation : 27/03/2025</div>
+      </div>
+      <div class="offre-card">
+        <div class="offre-title">Développeur Web</div>
+        <div class="offre-info">ID de l'offre : 12345</div>
+        <div class="offre-info">Date de postulation : 27/03/2025</div>
+      </div>
+      <div class="offre-card">
+        <div class="offre-title">Développeur Web</div>
+        <div class="offre-info">ID de l'offre : 12345</div>
+        <div class="offre-info">Date de postulation : 27/03/2025</div>
+      </div>
+      <div class="offre-card">
+        <div class="offre-title">Développeur Web</div>
+        <div class="offre-info">ID de l'offre : 12345</div>
+        <div class="offre-info">Date de postulation : 27/03/2025</div>
+      </div>
+  </section>
   <footer class="pied-de-page">
-    <div class="w-layout-hflex contacts">
-      <img loading="lazy" src="images/instagram.svg" alt="" class="instagram">
-      <img loading="lazy" src="images/twitter.svg" alt="" class="twitter">
-      <img loading="lazy" src="images/linkedin.svg" alt="" class="linkedin">
-      <img loading="lazy" src="images/facebook.svg" alt="" class="facebook">
-      <img loading="lazy" src="images/youtube.svg" alt="" class="image-32">
-    </div>
-    
-    <div class="mention-l-gales">
-      © 2025 StageHorizon | Inc. Tous droits réservés CGU
-    </div>
-  </footer>
-  <script src="js/script.js" defer></script>
+      <div class="w-layout-hflex contacts">
+        <img loading="lazy" src="images/instagram.svg" alt="" class="instagram">
+        <img loading="lazy" src="images/twitter.svg" alt="" class="twitter">
+        <img loading="lazy" src="images/linkedin.svg" alt="" class="linkedin">
+        <img loading="lazy" src="images/facebook.svg" alt="" class="facebook">
+        <img loading="lazy" src="images/youtube.svg" alt="" class="image-32">
+      </div>
+      
+      <div class="mention-l-gales">
+        © 2025 StageHorizon | Inc. Tous droits réservés CGU
+      </div>
+    </footer>
+    <script src="js/script.js" defer></script>
 
   
 </body>
 
 </html>
+  
+
+
+
