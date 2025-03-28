@@ -1,4 +1,56 @@
 
+<?php
+session_start();
+require_once __DIR__ . '/../config/BDD.php';
+
+$error = '';
+$success = '';
+
+try {
+    $bdd = connexionBDD();
+    
+    // Vérifier si l'utilisateur est connecté
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: connexion.php');
+        exit();
+    }
+
+    // Récupérer les offres favorites de l'utilisateur
+    $stmt = $bdd->prepare("
+        SELECT o.*, e.nom as entreprise_nom, e.logo_path
+        FROM Offre o
+        INNER JOIN Favoris f ON o.id = f.offre_id 
+        INNER JOIN Entreprise e ON o.entreprise_id = e.id
+        WHERE f.utilisateur_id = :user_id
+        ORDER BY f.date_ajout DESC
+    ");
+    
+    $stmt->execute([':user_id' => $_SESSION['user_id']]);
+    $favoris = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Gérer la suppression des favoris
+    if (isset($_POST['remove_favori'])) {
+        $offre_id = $_POST['offre_id'];
+        
+        $stmt = $bdd->prepare("
+            DELETE FROM Favoris 
+            WHERE utilisateur_id = :user_id 
+            AND offre_id = :offre_id
+        ");
+        
+        $stmt->execute([
+            ':user_id' => $_SESSION['user_id'],
+            ':offre_id' => $offre_id
+        ]);
+        
+        $success = "Offre retirée des favoris";
+        header("Refresh: 1");
+    }
+
+} catch (Exception $e) {
+    $error = "Erreur lors de la récupération des favoris: " . $e->getMessage();
+}
+?>
 
 <html lang="fr" data-wf-page="67b5bf1849f940e792c2855e" data-wf-site="67b49e8f9c9f8a910dad1bec">
 

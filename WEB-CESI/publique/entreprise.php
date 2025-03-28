@@ -2,6 +2,39 @@
 
 session_start();
 
+require_once __DIR__ . '/../config/BDD.php';
+
+$error = '';
+$success = '';
+
+try {
+    $bdd = connexionBDD();
+    
+    // Récupération de toutes les entreprises
+    $stmt = $bdd->prepare("
+        SELECT e.*, COUNT(o.id) as nb_offres 
+        FROM Entreprise e
+        LEFT JOIN Offre o ON e.id = o.entreprise_id
+        GROUP BY e.id
+        ORDER BY e.nom ASC
+    ");
+    $stmt->execute();
+    $entreprises = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Récupération des offres pour chaque entreprise
+    foreach($entreprises as &$entreprise) {
+        $stmt = $bdd->prepare("
+            SELECT * FROM Offre 
+            WHERE entreprise_id = :entreprise_id
+            ORDER BY date_debut DESC
+        ");
+        $stmt->execute([':entreprise_id' => $entreprise['id']]);
+        $entreprise['offres'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+} catch (Exception $e) {
+    $error = "Erreur lors de la récupération des données: " . $e->getMessage();
+}
 
 
 ?>

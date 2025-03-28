@@ -1,9 +1,64 @@
 <?php
-
 session_start();
+require_once __DIR__ . '/../config/BDD.php';
+require_once __DIR__ . '/../modèles/utilisateur.php';
 
+$success = '';
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $bdd = connexionBDD();
+    $userModel = new Utilisateur($bdd);
 
+    $nom = trim($_POST['nom']);
+    $prenom = trim($_POST['prenom']);
+    $email = trim($_POST['email']);
+    $password = $_POST['password'];
+    $confirm_password = $_POST['confirm-password'];
+    $statut = $_POST['statut'];
+    
+    if (empty($nom) || empty($prenom) || empty($email) || empty($password)) {
+        $error = "Tous les champs sont obligatoires";
+    } elseif ($password !== $confirm_password) {
+        $error = "Les mots de passe ne correspondent pas";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = "Format d'email invalide";
+    } else {
+        try {
+            if ($userModel->emailExists($email)) {
+                $error = "Cet email est déjà utilisé";
+            } else {
+                $cvPath = '';
+                if (isset($_FILES['cv']) && $_FILES['cv']['error'] === UPLOAD_ERR_OK) {
+                    $uploadDir = __DIR__ . '/../uploads/cv/';
+                    if (!is_dir($uploadDir)) {
+                        mkdir($uploadDir, 0755, true);
+                    }
+                    
+                    $extension = pathinfo($_FILES['cv']['name'], PATHINFO_EXTENSION);
+                    $filename = uniqid() . '.' . $extension;
+                    $cvPath = 'uploads/cv/' . $filename;
+                    
+                    if (!move_uploaded_file($_FILES['cv']['tmp_name'], $uploadDir . $filename)) {
+                        throw new Exception("Erreur lors de l'upload du CV");
+                    }
+                }
+                $userId = $userModel->createUser([
+                    'nom' => $nom,
+                    'prenom' => $prenom,
+                    'email' => $email,
+                    'mot_de_passe' => $password,
+                    'role' => strtolower($statut),
+                    'cv_path' => $cvPath
+                ]);
+                
+                $success = "Compte créé avec succès!";
+                header("Refresh: 3; url=connexion.php");
+            }
+        } catch (Exception $e) {
+            $error = "Erreur lors de la création du compte: " . $e->getMessage();
+        }
+    }
+}
 ?>
 
 

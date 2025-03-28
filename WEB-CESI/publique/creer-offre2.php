@@ -1,9 +1,51 @@
 <?php
-
 session_start();
+require_once __DIR__ . '/../config/BDD.php';
 
+$error = '';
+$success = '';
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $bdd = connexionBDD();
 
+    // Récupération des données du formulaire
+    $titre = trim($_POST['titre']);
+    $description = trim($_POST['description']);
+    $entreprise_id = trim($_POST['entreprise_id']);
+    $type_contrat = trim($_POST['type_contrat']);
+    $duree = trim($_POST['duree']);
+    $remuneration = trim($_POST['remuneration']);
+    $date_debut = trim($_POST['date_debut']);
+
+    // Validation basique
+    if (empty($titre) || empty($description) || empty($entreprise_id)) {
+        $error = "Les champs titre, description et entreprise sont obligatoires";
+    } else {
+        try {
+            // Création de l'offre
+            $stmt = $bdd->prepare("
+                INSERT INTO Offre (titre, description, entreprise_id, type_contrat, duree, remuneration, date_debut) 
+                VALUES (:titre, :description, :entreprise_id, :type_contrat, :duree, :remuneration, :date_debut)
+            ");
+            
+            $stmt->execute([
+                ':titre' => $titre,
+                ':description' => $description,
+                ':entreprise_id' => $entreprise_id,
+                ':type_contrat' => $type_contrat,
+                ':duree' => $duree,
+                ':remuneration' => $remuneration,
+                ':date_debut' => $date_debut
+            ]);
+
+            $success = "Offre créée avec succès!";
+            header("Refresh: 3; url=entreprise.php");
+
+        } catch (Exception $e) {
+            $error = "Erreur lors de la création de l'offre: " . $e->getMessage();
+        }
+    }
+}
 ?>
 
 <html lang="fr" data-wf-page="67c038fa0fbf3721b579cd1d" data-wf-site="67b49e8f9c9f8a910dad1bec">

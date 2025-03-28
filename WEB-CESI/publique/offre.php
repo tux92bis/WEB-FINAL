@@ -1,3 +1,65 @@
+<?php
+session_start();
+require_once __DIR__ . '/../config/BDD.php';
+
+$error = '';
+$success = '';
+
+try {
+    $bdd = connexionBDD();
+    
+    // Récupération de toutes les offres avec les informations de l'entreprise
+    $stmt = $bdd->prepare("
+        SELECT o.*, e.nom as entreprise_nom, e.logo_path
+        FROM Offre o
+        INNER JOIN Entreprise e ON o.entreprise_id = e.id
+        ORDER BY o.date_debut DESC
+    ");
+    $stmt->execute();
+    $offres = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Gestion des favoris si l'utilisateur est connecté
+    if (isset($_SESSION['user_id'])) {
+        if (isset($_POST['add_favori'])) {
+            $offre_id = $_POST['offre_id'];
+            
+            $stmt = $bdd->prepare("
+                INSERT INTO Favoris (utilisateur_id, offre_id, date_ajout)
+                VALUES (:user_id, :offre_id, NOW())
+            ");
+            
+            $stmt->execute([
+                ':user_id' => $_SESSION['user_id'],
+                ':offre_id' => $offre_id
+            ]);
+            
+            $success = "Offre ajoutée aux favoris";
+            header("Refresh: 1");
+        }
+
+        // Récupérer les favoris de l'utilisateur
+        $stmt = $bdd->prepare("
+            SELECT offre_id 
+            FROM Favoris 
+            WHERE utilisateur_id = :user_id
+        ");
+        $stmt->execute([':user_id' => $_SESSION['user_id']]);
+        $favoris = $stmt->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+} catch (Exception $e) {
+    $error = "Erreur lors de la récupération des offres: " . $e->getMessage();
+}
+
+// Afficher les messages d'erreur/succès si nécessaire
+if (!empty($error)): ?>
+    <div class="error"><?php echo $error; ?></div>
+<?php endif;
+
+if (!empty($success)): ?>
+    <div class="success"><?php echo $success; ?></div>
+<?php endif;
+?>
 
 <html lang="fr" data-wf-page="67bf0b02b89e8d9fc73fa4f9" data-wf-site="67b49e8f9c9f8a910dad1bec">
 

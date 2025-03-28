@@ -1,9 +1,75 @@
 <?php
-
 session_start();
+require_once __DIR__ . '/../config/BDD.php';
+require_once __DIR__ . '/../modèles/entreprise.php';
 
+// Initialisation des variables
+$error = '';
+$success = '';
 
+// Traitement du formulaire
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $bdd = connexionBDD();
+    $entrepriseModel = new Entreprise($bdd);
+
+    // Récupération des données
+    $nom = trim($_POST['nom']);
+    $adresse = trim($_POST['adresse']); 
+    $ville = trim($_POST['ville']);
+    $code_postal = trim($_POST['code_postal']);
+    $description = trim($_POST['description']);
+    $secteur = trim($_POST['secteur']);
+
+    // Validation basique
+    if (empty($nom) || empty($adresse) || empty($ville) || empty($code_postal)) {
+        $error = "Les champs nom, adresse, ville et code postal sont obligatoires";
+    } elseif (!preg_match("/^[0-9]{5}$/", $code_postal)) {
+        $error = "Le code postal doit contenir 5 chiffres";
+    } else {
+        try {
+            // Gestion du logo
+            $logoPath = '';
+            if (isset($_FILES['logo']) && $_FILES['logo']['error'] === UPLOAD_ERR_OK) {
+                $uploadDir = __DIR__ . '/../uploads/logos/';
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0755, true);
+                }
+                
+                $extension = pathinfo($_FILES['logo']['name'], PATHINFO_EXTENSION);
+                $filename = uniqid() . '.' . $extension;
+                $logoPath = 'uploads/logos/' . $filename;
+                
+                if (!move_uploaded_file($_FILES['logo']['tmp_name'], $uploadDir . $filename)) {
+                    throw new Exception("Erreur lors de l'upload du logo");
+                }
+            }
+
+            // Création de l'entreprise
+            $stmt = $bdd->prepare("
+                INSERT INTO Entreprise (nom, adresse, ville, code_postal, description, secteur_activite, logo_path) 
+                VALUES (:nom, :adresse, :ville, :code_postal, :description, :secteur, :logo_path)
+            ");
+            
+            $stmt->execute([
+                ':nom' => $nom,
+                ':adresse' => $adresse,
+                ':ville' => $ville,
+                ':code_postal' => $code_postal,
+                ':description' => $description,
+                ':secteur' => $secteur,
+                ':logo_path' => $logoPath
+            ]);
+
+            $success = "Entreprise créée avec succès!";
+            header("Refresh: 3; url=entreprise.php");
+
+        } catch (Exception $e) {
+            $error = "Erreur lors de la création de l'entreprise: " . $e->getMessage();
+        }
+    }
+}
 ?>
+
 
 <html lang="fr" data-wf-page="67bc967e0972095bf8851d61" data-wf-site="67b49e8f9c9f8a910dad1bec">
 

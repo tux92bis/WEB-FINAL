@@ -1,4 +1,45 @@
 
+<?php
+session_start();
+require_once __DIR__ . '/../config/BDD.php';
+
+$error = '';
+$success = '';
+
+try {
+    $bdd = connexionBDD();
+    
+    // Vérifier si l'utilisateur est connecté
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: connexion.php');
+        exit();
+    }
+
+    // Récupérer l'historique des candidatures de l'utilisateur
+    $stmt = $bdd->prepare("
+        SELECT c.*, o.titre as offre_titre, e.nom as entreprise_nom, e.logo_path
+        FROM Candidature c
+        INNER JOIN Offre o ON c.offre_id = o.id
+        INNER JOIN Entreprise e ON o.entreprise_id = e.id
+        WHERE c.utilisateur_id = :user_id
+        ORDER BY c.date_candidature DESC
+    ");
+    
+    $stmt->execute([':user_id' => $_SESSION['user_id']]);
+    $candidatures = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+} catch (Exception $e) {
+    $error = "Erreur lors de la récupération de l'historique: " . $e->getMessage();
+}
+
+// Afficher les messages d'erreur/succès si nécessaire
+if (!empty($error)): ?>
+    <div class="error"><?php echo $error; ?></div>
+<?php endif;
+
+if (!empty($success)): ?>
+    <div class="success"><?php echo $success; ?></div>
+<?php endif; ?>
 
 
 <html lang="fr" data-wf-page="67bf1b3b07f212818b80ddf5" data-wf-site="67b49e8f9c9f8a910dad1bec">
