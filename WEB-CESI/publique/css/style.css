@@ -2088,10 +2088,28 @@ textarea.w-select {
 .w-condition-invisible {
   display: none !important;
 }
-
+/*
 .wf-layout-layout {
   display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows:auto;
+  gap: 0;                         /* Aucun espace entre les éléments */
+ /* margin: 0;                      /* Suppression des marges */
+ /* padding: 0; */
+/*}*/
+.wf-layout-layout {
+  display: flex;           /* Passer en flexbox */
+  flex-wrap: wrap;
+  gap:20px
+
 }
+.wf-layout-layout > * {
+  flex: 1 1 50%;           /* 2 éléments par ligne */
+  box-sizing: border-box;
+  margin-bottom: 20px;
+}
+
+
 
 .w-code-component>* {
   height: 100%;
