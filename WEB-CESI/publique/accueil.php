@@ -70,9 +70,9 @@ $offres = $offreModel->offresFiltrees($filtres);
             </div>
             <nav class="w-dropdown-list">
               <?php if ($_SESSION['user']['role'] === 'admin'): ?>
-                <a href="creer-offre.php" class="dropdown-link w-dropdown-link">Ajouter une entreprise</a>
-                <a href="ajout-utilisateur.php" class="dropdown-link-2 w-dropdown-link">Ajouter un utilisateur</a>
-                <a href="creer-offre.php" class="dropdown-link-3 w-dropdown-link">Ajouter une offre</a>
+                <a href="creerEntreprise.php" class="dropdown-link w-dropdown-link">Ajouter une entreprise</a>
+                <a href="creerUtilisateur.php" class="dropdown-link-2 w-dropdown-link">Ajouter un utilisateur</a>
+                <a href="creerOffre.php" class="dropdown-link-3 w-dropdown-link">Ajouter une offre</a>
               <?php endif; ?>
             </nav>
           </div>

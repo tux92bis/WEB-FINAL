@@ -89,9 +89,9 @@ try {
               <div> Compte</div>
             </div>
             <nav class="w-dropdown-list">
-              <a href="creer-offre.php" class="dropdown-link w-dropdown-link">Ajouter une offre</a>
-              <a href="candidature2.php" class="dropdown-link-2 w-dropdown-link">Ajouter un utilisateur</a>
-              <a href="creer-offre2.php" class="dropdown-link-3 w-dropdown-link">Ajouter une entreprise</a>
+              <a href="creerOffre.php" class="dropdown-link w-dropdown-link">Ajouter une offre</a>
+              <a href="creerUtilisateur.php" class="dropdown-link-2 w-dropdown-link">Ajouter un utilisateur</a>
+              <a href="creerEntreprise.php" class="dropdown-link-3 w-dropdown-link">Ajouter une entreprise</a>
             </nav>
           </div><img src="images/generic-avatar.svg" loading="lazy" width="36" alt="" class="image">
         </div>

@@ -3,31 +3,26 @@ session_start();
 require_once __DIR__ . '/../config/BDD.php';
 require_once __DIR__ . '/../modèles/entreprise.php';
 
-// Initialisation des variables
 $error = '';
 $success = '';
 
-// Traitement du formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $bdd = connexionBDD();
     $entrepriseModel = new Entreprise($bdd);
 
-    // Récupération des données
     $nom = trim($_POST['nom']);
     $adresse = trim($_POST['adresse']); 
     $ville = trim($_POST['ville']);
     $code_postal = trim($_POST['code_postal']);
     $description = trim($_POST['description']);
-    $secteur = trim($_POST['secteur']);
 
-    // Validation basique
     if (empty($nom) || empty($adresse) || empty($ville) || empty($code_postal)) {
         $error = "Les champs nom, adresse, ville et code postal sont obligatoires";
     } elseif (!preg_match("/^[0-9]{5}$/", $code_postal)) {
         $error = "Le code postal doit contenir 5 chiffres";
     } else {
         try {
-            // Gestion du logo
+          
             $logoPath = '';
             if (isset($_FILES['logo']) && $_FILES['logo']['error'] === UPLOAD_ERR_OK) {
                 $uploadDir = __DIR__ . '/../uploads/logos/';
@@ -44,7 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
 
-            // Création de l'entreprise
             $stmt = $bdd->prepare("
                 INSERT INTO Entreprise (nom, adresse, ville, code_postal, description, secteur_activite, logo_path) 
                 VALUES (:nom, :adresse, :ville, :code_postal, :description, :secteur, :logo_path)
@@ -115,9 +109,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               <div> Compte</div>
             </div>
             <nav class="w-dropdown-list">
-              <a href="creer-offre.php" class="dropdown-link w-dropdown-link">Ajouter une entreprise</a>
-              <a href="candidature.php" class="dropdown-link-2 w-dropdown-link">Ajouter un utilisateur</a>
-              <a href="creer-offre2.php" class="dropdown-link-3 w-dropdown-link">Ajouter une offre</a>
+              <a href="creerEntreprise.php" class="dropdown-link w-dropdown-link">Ajouter une entreprise</a>
+              <a href="creerUtilisateur.php" class="dropdown-link-2 w-dropdown-link">Ajouter un utilisateur</a>
+              <a href="creerOffre.php" class="dropdown-link-3 w-dropdown-link">Ajouter une offre</a>
             </nav>
           </div><img src="images/generic-avatar.svg" loading="lazy" width="36" alt="" class="image">
         </div>

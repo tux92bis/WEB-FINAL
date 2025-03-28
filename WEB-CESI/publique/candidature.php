@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
                 
-                // Création de l'utilisateur (sans hachage)
+  
                 $userId = $userModel->createUser([
                     'nom' => $nom,
                     'prenom' => $prenom,
@@ -54,7 +54,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]);
                 
                 $success = "Compte créé avec succès!";
-                // Redirection après 3 secondes
                 header("Refresh: 3; url=connexion.php");
             }
         } catch (Exception $e) {
@@ -103,9 +102,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               <div>Compte</div>
             </div>
             <nav class="w-dropdown-list">
-              <a href="creer-offre.php" class="dropdown-link w-dropdown-link">Ajouter une entreprise</a>
-              <a href="ajout-utilisateur.php" class="dropdown-link-2 w-dropdown-link">Ajouter un utilisateur</a>
-              <a href="creer-offre.php" class="dropdown-link-3 w-dropdown-link">Ajouter une offre</a>
+              <a href="creerEntreprise.php" class="dropdown-link w-dropdown-link">Ajouter une entreprise</a>
+              <a href="creerUtilisateur.php" class="dropdown-link-2 w-dropdown-link">Ajouter un utilisateur</a>
+              <a href="creerOffre.php" class="dropdown-link-3 w-dropdown-link">Ajouter une offre</a>
             </nav>
           </div>
           <img src="images/generic-avatar.svg" loading="lazy" width="36" alt="" class="image">
