@@ -3,16 +3,12 @@ session_start();
 require_once __DIR__ . '/../config/BDD.php';
 require_once __DIR__ . '/../modèles/utilisateur.php';
 
-// Initialisation des variables
-$error = '';
 $success = '';
 
-// Traitement du formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $bdd = connexionBDD();
     $userModel = new Utilisateur($bdd);
 
-    // Récupération des données
     $nom = trim($_POST['nom']);
     $prenom = trim($_POST['prenom']);
     $email = trim($_POST['email']);
@@ -20,7 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $confirm_password = $_POST['confirm-password'];
     $statut = $_POST['statut'];
     
-    // Validation basique
     if (empty($nom) || empty($prenom) || empty($email) || empty($password)) {
         $error = "Tous les champs sont obligatoires";
     } elseif ($password !== $confirm_password) {
@@ -29,11 +24,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = "Format d'email invalide";
     } else {
         try {
-            // Vérification si l'email existe déjà
             if ($userModel->emailExists($email)) {
                 $error = "Cet email est déjà utilisé";
             } else {
-                // Gestion du fichier CV
                 $cvPath = '';
                 if (isset($_FILES['cv']) && $_FILES['cv']['error'] === UPLOAD_ERR_OK) {
                     $uploadDir = __DIR__ . '/../uploads/cv/';

@@ -22,7 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = "Les champs titre, description et entreprise sont obligatoires";
     } else {
         try {
-            // Création de l'offre
             $stmt = $bdd->prepare("
                 INSERT INTO Offre (titre, description, entreprise_id, type_contrat, duree, remuneration, date_debut) 
                 VALUES (:titre, :description, :entreprise_id, :type_contrat, :duree, :remuneration, :date_debut)

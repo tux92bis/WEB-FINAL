@@ -9,13 +9,11 @@ $success = '';
 try {
     $bdd = connexionBDD();
     
-    // Vérifier si l'utilisateur est connecté
     if (!isset($_SESSION['user_id'])) {
         header('Location: connexion.php');
         exit();
     }
 
-    // Récupérer l'historique des candidatures de l'utilisateur
     $stmt = $bdd->prepare("
         SELECT c.*, o.titre as offre_titre, e.nom as entreprise_nom, e.logo_path
         FROM Candidature c
@@ -32,16 +30,7 @@ try {
     $error = "Erreur lors de la récupération de l'historique: " . $e->getMessage();
 }
 
-// Afficher les messages d'erreur/succès si nécessaire
-if (!empty($error)): ?>
-    <div class="error"><?php echo $error; ?></div>
-<?php endif;
-
-if (!empty($success)): ?>
-    <div class="success"><?php echo $success; ?></div>
-<?php endif; ?>
-
-
+?>
 <html lang="fr" data-wf-page="67bf1b3b07f212818b80ddf5" data-wf-site="67b49e8f9c9f8a910dad1bec">
 
 <head>

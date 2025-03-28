@@ -9,8 +9,6 @@ $success = '';
 
 try {
     $bdd = connexionBDD();
-    
-    // Récupération de toutes les entreprises
     $stmt = $bdd->prepare("
         SELECT e.*, COUNT(o.id) as nb_offres 
         FROM Entreprise e
@@ -21,7 +19,6 @@ try {
     $stmt->execute();
     $entreprises = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Récupération des offres pour chaque entreprise
     foreach($entreprises as &$entreprise) {
         $stmt = $bdd->prepare("
             SELECT * FROM Offre 

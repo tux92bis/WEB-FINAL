@@ -9,13 +9,11 @@ $success = '';
 try {
     $bdd = connexionBDD();
     
-    // Vérifier si l'utilisateur est connecté
     if (!isset($_SESSION['user_id'])) {
         header('Location: connexion.php');
         exit();
     }
 
-    // Récupérer les offres favorites de l'utilisateur
     $stmt = $bdd->prepare("
         SELECT o.*, e.nom as entreprise_nom, e.logo_path
         FROM Offre o
@@ -28,7 +26,7 @@ try {
     $stmt->execute([':user_id' => $_SESSION['user_id']]);
     $favoris = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Gérer la suppression des favoris
+
     if (isset($_POST['remove_favori'])) {
         $offre_id = $_POST['offre_id'];
         
