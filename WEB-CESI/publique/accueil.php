@@ -7,10 +7,8 @@ require_once __DIR__ . '/../modeles/offreStage.php';
 require_once __DIR__ . '/../modeles/entreprise.php';
 require_once __DIR__ . '/../modeles/favoris.php';
 
-// Initialiser la connexion à la base de données
+
 $bdd = connexionBDD();
-
-
 
 $filtres = [];
 
@@ -30,6 +28,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 }
 
 $offres = $offreModel->offresFiltrees($filtres);
+
+foreach ($offres as &$offre) {
+  $offre['type'] = $offre['type'] ?? 'Non spécifié';
+
+  if (!empty($offre['date_de_debut']) && !empty($offre['date_de_fin'])) {
+    try {
+      $debut = new DateTime($offre['date_de_debut']);
+      $fin = new DateTime($offre['date_de_fin']);
+      $duree = $debut->diff($fin);
+      $offre['duree'] = $duree->format('%m mois');
+    } catch (Exception $e) {
+      $offre['duree'] = 'Durée non spécifiée';
+    }
+  } else {
+    $offre['date_de_debut'] = 'Non spécifiée';
+    $offre['date_de_fin'] = 'Non spécifiée';
+    $offre['duree'] = 'Durée non spécifiée';
+  }
+}
+unset($offre);
+
 ?>
 
 
@@ -149,13 +168,13 @@ $offres = $offreModel->offresFiltrees($filtres);
         <div class="offre-details">
           <p><strong>Type:</strong> <?= htmlspecialchars($offre['type']) ?></p>
           <p><strong>Rémunération:</strong> <?= $offre['base_remuneration'] ?>€</p>
-          <p><strong>Durée:</strong> <?= $offre['duree'] ?> mois</p>
+          <p><strong>Dates</strong> <?= $offre['date_de_debut'] ?> au <?= $offre['date_de_fin'] ?></p>
           <p><strong>Domaine:</strong> <?= htmlspecialchars($offre['mineure']) ?></p>
         </div>
 
         <a href="postuler.php?id=<?= $offre['id_offre'] ?>" class="button-2 w-button">Postuler</a>
 
-        <?php if ($_SESSION['user']['role'] === 'admin'): ?>
+        <?php if ($_SESSION['utilisateur']['role'] === 'admin'): ?>
           <div class="modifsupp">
             <a href="modifier-offre.php?id=<?= $offre['id_offre'] ?>">Modifier</a>
             <form method="post" action="supprimer-offre.php" style="display:inline;">
