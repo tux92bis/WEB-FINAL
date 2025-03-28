@@ -29,7 +29,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 $offres = $offreModel->offresFiltrees($filtres);
 
+foreach ($offres as &$offre) {
+  $offre['type'] = $offre['type'] ?? 'Non spécifié';
+
+  if (!empty($offre['date_de_debut']) && !empty($offre['date_de_fin'])) {
+    try {
+      $debut = new DateTime($offre['date_de_debut']);
+      $fin = new DateTime($offre['date_de_fin']);
+      $duree = $debut->diff($fin);
+      $offre['duree'] = $duree->format('%m mois');
+    } catch (Exception $e) {
+      $offre['duree'] = 'Durée non spécifiée';
+    }
+  } else {
+    $offre['date_de_debut'] = 'Non spécifiée';
+    $offre['date_de_fin'] = 'Non spécifiée';
+    $offre['duree'] = 'Durée non spécifiée';
+  }
+}
+unset($offre);
+
 ?>
+
 
 
 

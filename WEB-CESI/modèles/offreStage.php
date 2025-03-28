@@ -7,44 +7,32 @@ class OffreStage
     {
         $this->bdd = $bdd;
     }
-    public function offresFiltrees($filtres = [])
+    public function offresFiltrees()
     {
         $sql = "SELECT o.*, 
-                o.debut as date_debut,
-                o.fin as date_fin,
-                o.type
+                o.date_debut as date_de_debut,
+                o.date_fin as date_de_fin,
+                o.type,
+                e.nom as nom_entreprise,
+                COALESCE((SELECT COUNT(*) FROM Favoris f 
+                 WHERE f.id_offre = o.id_offre 
+                 AND f.id_etudiant = (
+                    SELECT id_etudiant FROM Etudiant 
+                    WHERE id_utilisateur = :user_id
+                 )), 0) as est_favori
                 FROM OffreStage o 
-                WHERE 1=1";
+                INNER JOIN Entreprise e ON o.id_entreprise = e.id_entreprise";
 
-        $params = [];
-
-        // Correction des filtres
-        if (!empty($filtres['search'])) {
-            $sql .= " AND (o.titre LIKE :search OR o.description LIKE :search)";
-            $params[':search'] = "%{$filtres['search']}%";
-        }
-
-        if (!empty($filtres['type'])) {
-            $sql .= " AND o.type = :type";
-            $params[':type'] = $filtres['type'];
-        }
-
-        if (!empty($filtres['remuneration'])) {
-            $sql .= " AND o.base_remuneration >= :remuneration";
-            $params[':remuneration'] = $filtres['remuneration'];
-        }
-
-        if (!empty($filtres['domaine']) && is_array($filtres['domaine'])) {
-            $placeholders = str_repeat('?,', count($filtres['domaine']) - 1) . '?';
-            $sql .= " AND o.mineure IN ($placeholders)";
-            $params = array_merge($params, $filtres['domaine']);
-        }
+        $user_id = isset($_SESSION['utilisateur']['id']) ? $_SESSION['utilisateur']['id'] : 0;
+        $params = [':user_id' => $user_id];
 
         try {
             $stmt = $this->bdd->prepare($sql);
             $stmt->execute($params);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
+            // Pour le débogage
+            error_log($e->getMessage());
             return [];
         }
     }
