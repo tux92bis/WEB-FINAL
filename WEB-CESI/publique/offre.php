@@ -8,7 +8,6 @@ $success = '';
 try {
     $bdd = connexionBDD();
     
-    // Récupération de toutes les offres avec les informations de l'entreprise
     $stmt = $bdd->prepare("
         SELECT o.*, e.nom as entreprise_nom, e.logo_path
         FROM Offre o
@@ -18,7 +17,6 @@ try {
     $stmt->execute();
     $offres = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Gestion des favoris si l'utilisateur est connecté
     if (isset($_SESSION['user_id'])) {
         if (isset($_POST['add_favori'])) {
             $offre_id = $_POST['offre_id'];
@@ -37,7 +35,6 @@ try {
             header("Refresh: 1");
         }
 
-        // Récupérer les favoris de l'utilisateur
         $stmt = $bdd->prepare("
             SELECT offre_id 
             FROM Favoris 
@@ -51,16 +48,8 @@ try {
     $error = "Erreur lors de la récupération des offres: " . $e->getMessage();
 }
 
-// Afficher les messages d'erreur/succès si nécessaire
-if (!empty($error)): ?>
-    <div class="error"><?php echo $error; ?></div>
-<?php endif;
 
-if (!empty($success)): ?>
-    <div class="success"><?php echo $success; ?></div>
-<?php endif;
 ?>
-
 <html lang="fr" data-wf-page="67bf0b02b89e8d9fc73fa4f9" data-wf-site="67b49e8f9c9f8a910dad1bec">
 
 <head>
