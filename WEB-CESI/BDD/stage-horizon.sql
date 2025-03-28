@@ -81,7 +81,8 @@ CREATE TABLE Favoris (
     id_etudiant INTEGER NOT NULL,
     id_offre INTEGER NOT NULL,
     FOREIGN KEY (id_etudiant) REFERENCES Etudiant(id_etudiant),
-    FOREIGN KEY (id_offre) REFERENCES OffreStage(id_offre),
+    FOREIGN KEY (id_offre) REFERE
+    NCES OffreStage(id_offre),
     UNIQUE(id_etudiant, id_offre)
 );
 
