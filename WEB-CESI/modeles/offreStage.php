@@ -10,7 +10,7 @@ class OffreStage {
         $sql = "SELECT o.*, 
                 (SELECT COUNT(*) FROM Favoris f WHERE f.id_offre = o.id_offre AND f.id_etudiant = :user_id) as est_favori
                 FROM OffreStage o WHERE 1=1";
-        $params = [':user_id' => $_SESSION['user']['id']];
+        $params = [':user_id' => $_SESSION['utilisateur']['id']];
         
         if (!empty($filtres['search'])) {
             $sql .= " AND (o.titre LIKE :search OR o.description LIKE :search)";

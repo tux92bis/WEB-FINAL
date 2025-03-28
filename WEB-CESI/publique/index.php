@@ -7,6 +7,8 @@ $bdd = connexionBDD();
 $auth = new Authentification($bdd);
 $erreur = '';
 
+
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($auth->connexion($_POST['email'], $_POST['mot_de_passe'])) {
         header('Location: accueil.php');

@@ -1,13 +1,4 @@
-<?php
 
-session_start();
-
-if (!isset($_SESSION['user'])) {
-  header('Location: index.php');
-  exit();
-}
-
-?>
 
 
 <html lang="fr" data-wf-page="67bf1b3b07f212818b80ddf5" data-wf-site="67b49e8f9c9f8a910dad1bec">
