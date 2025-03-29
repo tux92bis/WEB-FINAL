@@ -119,8 +119,8 @@ unset($offre);
         <div class="price-display">
           <span id="priceValue"><?= htmlspecialchars($_GET['base_remuneration'] ?? 500, ENT_QUOTES) ?></span> €
         </div>
-        <input type="range" id="base_remuneration" name="base_remuneration" min="0" max="1000" 
-              value="<?= htmlspecialchars($_GET['base_remuneration'] ?? 500, ENT_QUOTES) ?>" step="10"
+        <input type="range" id="base_remuneration" name="base_remuneration" min="0" max="2000" 
+              value="<?= htmlspecialchars($_GET['base_remuneration'] ?? 1000, ENT_QUOTES) ?>" step="10"
               oninput="document.getElementById('priceValue').textContent = this.value">
       </div>
     
