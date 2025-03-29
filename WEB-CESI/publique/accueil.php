@@ -87,7 +87,7 @@ unset($offre);
               <div>Compte</div>
             </div>
             <nav class="w-dropdown-list">
-              <?php if ($_SESSION['Utilisateur']['role'] === 'admin'): ?>
+              <?php if (isset($_SESSION['utilisateur']['role']) && $_SESSION['utilisateur']['role'] === 'admin'): ?>
                 <a href="creerEntreprise.php" class="dropdown-link w-dropdown-link">Ajouter une entreprise</a>
                 <a href="creerUtilisateur.php" class="dropdown-link-2 w-dropdown-link">Ajouter un utilisateur</a>
                 <a href="creerOffre.php" class="dropdown-link-3 w-dropdown-link">Ajouter une offre</a>
@@ -178,20 +178,24 @@ unset($offre);
           </div>
 
           <a href="postuler.php?id=<?= $offre['id_offre'] ?>" class="button-2 w-button">Postuler</a>
-          <label for="toggleCheckbox" class="toggle">
+         <!-- Toggle menu -->
+          <label for="checkbox" class="toggle">
             <div class="bars"></div>
             <div class="bars"></div>
             <div class="bars"></div>
-      </label>
-          <?php if ($_SESSION['utilisateur']['role'] === 'admin'): ?>
-            <div class="modifsupp">
-              <a href="modifier-offre.php?id=<?= $offre['id_offre'] ?>">Modifier</a>
-              <form method="post" action="supprimer-offre.php" style="display:inline;">
-                <input type="hidden" name="id_offre" value="<?= $offre['id_offre'] ?>">
-                <button type="submit" class="btn-supprimer">Supprimer</button>
-              </form>
-            </div>
-          <?php endif; ?>
+          </label>
+          <input type="checkbox" id="checkbox" class="hidden-checkbox" />
+
+          <!-- Menu modif/supp -->
+          <div class="modifsupp">
+            <a href="modifier-offre.php?id=<?= $offre['id_offre'] ?>">Modifier</a>
+            <form method="post" action="supprimer-offre.php" style="display:inline;">
+              <input type="hidden" name="id_offre" value="<?= $offre['id_offre'] ?>">
+              <button type="submit" class="btn-supprimer">Supprimer</button>
+            </form>
+          </div>
+
+
 
           <form method="post" action="ajouterFavori.php" style="display:inline;">
             <input type="hidden" name="id_offre" value="<?= $offre['id_offre'] ?>">

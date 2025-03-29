@@ -1431,15 +1431,6 @@ html, body {
   display: block;
 }
 
-#checkbox1:checked + .modifsupp {
-  display: block;
-}
-#checkbox2:checked + .modifsupp {
-  display: block;
-}
-#checkbox3:checked + .modifsupp {
-  display: block;
-}
 .price-slider {
   width: 89%;
   padding: 20px;
