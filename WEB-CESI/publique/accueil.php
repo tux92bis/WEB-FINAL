@@ -14,9 +14,18 @@ $entrepriseModel = new Entreprise($bdd);
 $favorisModel = new Favoris($bdd);
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-  // Si une recherche est effectuée
+  
   if (!empty($_GET['search'])) {
     $filtres['search'] = $_GET['search'];
+  }
+  if (!empty($_GET['base_rémunération'])) {
+    $filtres['base_rémunération'] = (float) $_GET['base_rémunération'];
+  }
+  if (!empty($_GET['Type'])) {
+      $filtres['type'] = $_GET['Type'];
+  }
+  if (!empty($_GET['domaine']) && is_array($_GET['domaine'])) {
+      $filtres['domaine'] = $_GET['domaine'];
   }
 }
 
@@ -109,10 +118,14 @@ unset($offre);
       <h4>Filtrer les offres</h4>
       <div class="price-slider">
         <label for="base_rémunération">Gratification :</label>
-        <div class="price-display"><span id="priceValue"><?= $_GET['base_rémunération'] ?? 500 ?></span> €</div>
-        <input type="range" id="base_rémunération" name="base_rémunération" min="0" max="1000"
-          value="<?= $_GET['base_rémunération'] ?? 500 ?>" step="10">
+        <div class="price-display">
+          <span id="priceValue"><?= htmlspecialchars($_GET['base_rémunération'] ?? 500, ENT_QUOTES) ?></span> €
+        </div>
+        <input type="range" id="base_rémunération" name="base_rémunération" min="0" max="1000" 
+              value="<?= htmlspecialchars($_GET['base_rémunération'] ?? 500, ENT_QUOTES) ?>" step="10"
+              oninput="document.getElementById('priceValue').textContent = this.value">
       </div>
+    
 
       <fieldset>
         <legend>Type de contrat</legend>
@@ -215,6 +228,17 @@ unset($offre);
     </div>
     <div class="mention-l-gales">© 2025 StageHorizon | Inc. Tous droits réservés CGU</div>
   </footer>
+  <script>
+    <?php if (!empty($_GET)): ?>
+      document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('input[name^="domaine"], input[name="Type"]').forEach(input => {
+          if (input.checked) {
+            input.closest('label').classList.add('active-filter');
+          }
+        });
+      });
+    <?php endif; ?>
+  </script>
   <script src="../js/script.js"></script>
 
 </body>

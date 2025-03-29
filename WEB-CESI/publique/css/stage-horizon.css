@@ -1529,3 +1529,9 @@ input[type="range"]::-moz-range-thumb {
   color: #666;
   margin-top: 5px;
 }
+
+.active-filter {
+  background-color: #e0f7fa;
+  border-left: 3px solid #00bcd4;
+  padding-left: 8px;
+}

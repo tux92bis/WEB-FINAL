@@ -28,23 +28,29 @@ class OffreStage
         ':user_id' => $_SESSION['utilisateur']['id'] ?? 0
     ];
 
-    // 🔍 Recherche par mot-clé (titre ou description)
     if (!empty($filtres['search'])) {
         $sql .= " AND (LOWER(o.titre) LIKE LOWER(:search) OR LOWER(o.description) LIKE LOWER(:search))";
         $params[':search'] = '%' . strtolower($filtres['search']) . '%';
     }
 
-    // 🎯 Filtrer par domaine (mineure)
-    if (!empty($filtres['domaine'])) {
-        $sql .= " AND LOWER(o.mineure) = LOWER(:domaine)";
-        $params[':domaine'] = strtolower($filtres['domaine']);
+    if (!empty($filtres['domaine']) && is_array($filtres['domaine'])) {
+        $placeholders = implode(',', array_fill(0, count($filtres['domaine']), '?')); // Crée des `?` pour chaque valeur
+        $sql .= " AND LOWER(o.mineure) IN ($placeholders)";
     }
+    
 
+  
     try {
         error_log("SQL Générée : " . $sql);
         error_log("Paramètres : " . print_r($params, true));
 
         $stmt = $this->bdd->prepare($sql);
+        $index = 1; 
+        foreach ($filtres['domaine'] as $domaine) {
+            $stmt->bindValue($index, strtolower($domaine)); // Insérer chaque domaine en minuscules
+            $index++;
+        }
+
         $stmt->execute($params);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
