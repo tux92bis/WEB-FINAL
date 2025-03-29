@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once __DIR__ . '/../config/BDD.php';
 require_once __DIR__ . '/../modèles/offreStage.php';
 require_once __DIR__ . '/../modèles/entreprise.php';
@@ -86,10 +87,12 @@ unset($offre);
               <div>Compte</div>
             </div>
             <nav class="w-dropdown-list">
-              <?php if ($_SESSION['user']['role'] === 'admin'): ?>
+              <?php if ($_SESSION['Utilisateur']['role'] === 'admin'): ?>
                 <a href="creerEntreprise.php" class="dropdown-link w-dropdown-link">Ajouter une entreprise</a>
                 <a href="creerUtilisateur.php" class="dropdown-link-2 w-dropdown-link">Ajouter un utilisateur</a>
                 <a href="creerOffre.php" class="dropdown-link-3 w-dropdown-link">Ajouter une offre</a>
+              <?php else: ?>
+                <div class="dropdown-link w-dropdown-link text-muted">Accès réservé aux administrateurs</div>
               <?php endif; ?>
             </nav>
           </div>
