@@ -1342,7 +1342,7 @@ html, body {
   display: none;
 }
 .toggle {
-  position: relative;
+  position: absolute;
   width: 3px;
   height: 40px;
   cursor: pointer;
@@ -1351,8 +1351,10 @@ html, body {
   align-items: center;
   justify-content: center;
   gap: 4px;
-  top: -319px;
-  left: 336px;
+  top: 14px;
+  right: 19px;
+
+
 }
 
 .bars {

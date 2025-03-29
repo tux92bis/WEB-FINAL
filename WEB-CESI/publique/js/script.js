@@ -53,6 +53,30 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const toggles = document.querySelectorAll(".toggle");
+
+    toggles.forEach(toggle => {
+        toggle.addEventListener("click", function (event) {
+            event.stopPropagation(); // Empêche la fermeture immédiate du menu
+
+            const menu = this.nextElementSibling; // Récupère l'élément suivant (modifsupp)
+            
+            if (menu && menu.classList.contains("modifsupp")) {
+                menu.classList.toggle("visible");
+            }
+        });
+    });
+
+    // Cacher le menu si on clique ailleurs
+    document.addEventListener("click", function () {
+        document.querySelectorAll(".modifsupp.visible").forEach(menu => {
+            menu.classList.remove("visible");
+        });
+    });
+});
+
 /*suppression d'une offre*/
 function supprimerOffre() {
     const confirmation = confirm("Voulez-vous vraiment supprimer cette offre ?");

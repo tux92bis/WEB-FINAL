@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 
 require_once __DIR__ . '/../config/BDD.php';
@@ -7,24 +6,18 @@ require_once __DIR__ . '/../modèles/offreStage.php';
 require_once __DIR__ . '/../modèles/entreprise.php';
 require_once __DIR__ . '/../modèles/favoris.php';
 
-
 $bdd = connexionBDD();
 
 $filtres = [];
-
 $offreModel = new OffreStage($bdd);
 $entrepriseModel = new Entreprise($bdd);
 $favorisModel = new Favoris($bdd);
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-  if (!empty($_GET['search']))
+  // Si une recherche est effectuée
+  if (!empty($_GET['search'])) {
     $filtres['search'] = $_GET['search'];
-  if (!empty($_GET['Type']))
-    $filtres['type'] = $_GET['Type'];
-  if (!empty($_GET['base_rémunération']))
-    $filtres['remuneration'] = $_GET['base_rémunération'];
-  if (!empty($_GET['domaine']))
-    $filtres['domaine'] = (array) $_GET['domaine'];
+  }
 }
 
 $offres = $offreModel->offresFiltrees($filtres);
@@ -48,11 +41,7 @@ foreach ($offres as &$offre) {
   }
 }
 unset($offre);
-
 ?>
-
-
-
 
 <html lang="fr" data-wf-page="67b49e8f9c9f8a910dad1bf7" data-wf-site="67b49e8f9c9f8a910dad1bec">
 
@@ -97,6 +86,7 @@ unset($offre);
               <?php endif; ?>
             </nav>
           </div>
+          
           <img src="images/generic-avatar.svg" loading="lazy" width="36" alt="" class="image">
         </div>
       </div>
@@ -155,50 +145,59 @@ unset($offre);
       <?php endif; ?>
     </form>
   </aside>
-
   <div class="w-layout-layout offres wf-layout-layout">
-    <?php foreach ($offres as $offre):
-      $entreprise = $entrepriseModel->avoirParID($offre['id_entreprise']);
+    <?php if (!empty($offres)): ?>
+      <?php foreach ($offres as $offre):
+        $entreprise = $entrepriseModel->avoirParID($offre['id_entreprise']);
       ?>
-      <div class="w-layout-cell cell">
-        <h2 class="heading-2"><?= htmlspecialchars($entreprise['nom']) ?></h2>
-        <img src="images/bandeau-offre.png" loading="lazy" alt="" class="image-5">
-        <h3><?= htmlspecialchars($offre['titre']) ?></h3>
-        <p class="paragraph"><?= htmlspecialchars($offre['description']) ?></p>
+        <div class="w-layout-cell cell">
+          <h2 class="heading-2"><?= htmlspecialchars($entreprise['nom']) ?></h2>
+          <img src="images/bandeau-offre.png" loading="lazy" alt="" class="image-5">
+          <h3><?= htmlspecialchars($offre['titre']) ?></h3>
+          <p class="paragraph"><?= htmlspecialchars($offre['description']) ?></p>
 
-        <div class="offre-details">
-          <p><strong>Type:</strong> <?= htmlspecialchars($offre['type']) ?></p>
-          <p><strong>Rémunération:</strong> <?= $offre['base_remuneration'] ?>€</p>
-          <p><strong>Dates</strong> Avril 2025 - Juin 2025</p>
-          <p><strong>Domaine:</strong> <?= htmlspecialchars($offre['mineure']) ?></p>
-        </div>
-
-        <a href="postuler.php?id=<?= $offre['id_offre'] ?>" class="button-2 w-button">Postuler</a>
-
-        <?php if ($_SESSION['utilisateur']['role'] === 'admin'): ?>
-          <div class="modifsupp">
-            <a href="modifier-offre.php?id=<?= $offre['id_offre'] ?>">Modifier</a>
-            <form method="post" action="supprimer-offre.php" style="display:inline;">
-              <input type="hidden" name="id_offre" value="<?= $offre['id_offre'] ?>">
-              <button type="submit" class="btn-supprimer">Supprimer</button>
-            </form>
+          <div class="offre-details">
+            <p><strong>Type:</strong> <?= htmlspecialchars($offre['type']) ?></p>
+            <p><strong>Rémunération:</strong> <?= $offre['base_remuneration'] ?>€</p>
+            <p><strong>Dates:</strong> Avril 2025 - Juin 2025</p>
+            <p><strong>Domaine:</strong> <?= htmlspecialchars($offre['mineure']) ?></p>
           </div>
-        <?php endif; ?>
 
-        <form method="post" action="ajouterFavori.php" style="display:inline;">
-          <input type="hidden" name="id_offre" value="<?= $offre['id_offre'] ?>">
-          <button type="submit" class="favoris-btn">
-            <?= $offre['est_favori'] ? '★' : '☆' ?>
-          </button>
-        </form>
-      </div>
-    <?php endforeach; ?>
+          <a href="postuler.php?id=<?= $offre['id_offre'] ?>" class="button-2 w-button">Postuler</a>
+          <label for="toggleCheckbox" class="toggle">
+            <div class="bars"></div>
+            <div class="bars"></div>
+            <div class="bars"></div>
+      </label>
+          <?php if ($_SESSION['utilisateur']['role'] === 'admin'): ?>
+            <div class="modifsupp">
+              <a href="modifier-offre.php?id=<?= $offre['id_offre'] ?>">Modifier</a>
+              <form method="post" action="supprimer-offre.php" style="display:inline;">
+                <input type="hidden" name="id_offre" value="<?= $offre['id_offre'] ?>">
+                <button type="submit" class="btn-supprimer">Supprimer</button>
+              </form>
+            </div>
+          <?php endif; ?>
+
+          <form method="post" action="ajouterFavori.php" style="display:inline;">
+            <input type="hidden" name="id_offre" value="<?= $offre['id_offre'] ?>">
+            <button type="submit" class="favoris-btn">
+              <?= $offre['est_favori'] ? '★' : '☆' ?>
+            </button>
+          </form>
+        </div>
+      <?php endforeach; ?>
+    <?php else: ?>
+      <p>Aucun résultat trouvé pour : "<?= htmlspecialchars($_GET['search']) ?>"</p>
+    <?php endif; ?>
   </div>
+
+ 
 
   <div class="pagination">
     <a href="#">&laquo;</a>
-    <a href="#">1</a>
-    <a class="active" href="#">2</a>
+    <a  class="active" href="#">1</a>
+    <a href="#">2</a>
     <a href="#">3</a>
     <a href="#">4</a>
     <a href="#">5</a>
@@ -216,22 +215,8 @@ unset($offre);
     </div>
     <div class="mention-l-gales">© 2025 StageHorizon | Inc. Tous droits réservés CGU</div>
   </footer>
+  <script src="../js/script.js"></script>
 
-  <script>
-    const priceSlider = document.getElementById('base_rémunération');
-    const priceValue = document.getElementById('priceValue');
-
-    priceSlider.addEventListener('input', function () {
-      priceValue.textContent = this.value;
-    });
-    document.querySelectorAll('.btn-supprimer').forEach(btn => {
-      btn.addEventListener('click', function (e) {
-        if (!confirm('Voulez-vous vraiment supprimer cette offre ?')) {
-          e.preventDefault();
-        }
-      });
-    });
-  </script>
 </body>
 
 </html>

@@ -139,7 +139,7 @@ try {
         loading="lazy" src="images/youtube.svg" alt="" class="image-26"></div>
     <div class="mention-l-gales">© 2025 StageHorizon | Inc. Tous droits réservés CGU</div>
   </footer>
-  <script src="js/script.js" defer></script>
+  <script src="../js/script.js" defer></script>
 </body>
 
 </html>
