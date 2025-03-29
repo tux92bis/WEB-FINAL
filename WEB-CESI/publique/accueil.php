@@ -1,6 +1,4 @@
 <?php
-session_start();
-
 require_once __DIR__ . '/../config/BDD.php';
 require_once __DIR__ . '/../modèles/offreStage.php';
 require_once __DIR__ . '/../modèles/entreprise.php';
@@ -18,8 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
   if (!empty($_GET['search'])) {
     $filtres['search'] = $_GET['search'];
   }
-  if (!empty($_GET['base_rémunération'])) {
-    $filtres['base_rémunération'] = (float) $_GET['base_rémunération'];
+  if (!empty($_GET['base_remuneration'])) {
+    $filtres['base_remuneration'] = (float) $_GET['base_remuneration'];
   }
   if (!empty($_GET['Type'])) {
       $filtres['type'] = $_GET['Type'];
@@ -119,10 +117,10 @@ unset($offre);
       <div class="price-slider">
         <label for="base_rémunération">Gratification :</label>
         <div class="price-display">
-          <span id="priceValue"><?= htmlspecialchars($_GET['base_rémunération'] ?? 500, ENT_QUOTES) ?></span> €
+          <span id="priceValue"><?= htmlspecialchars($_GET['base_remuneration'] ?? 500, ENT_QUOTES) ?></span> €
         </div>
-        <input type="range" id="base_rémunération" name="base_rémunération" min="0" max="1000" 
-              value="<?= htmlspecialchars($_GET['base_rémunération'] ?? 500, ENT_QUOTES) ?>" step="10"
+        <input type="range" id="base_remuneration" name="base_remuneration" min="0" max="1000" 
+              value="<?= htmlspecialchars($_GET['base_remuneration'] ?? 500, ENT_QUOTES) ?>" step="10"
               oninput="document.getElementById('priceValue').textContent = this.value">
       </div>
     
