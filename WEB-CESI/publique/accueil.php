@@ -176,8 +176,9 @@ unset($offre);
   </aside>
   <div class="w-layout-layout offres wf-layout-layout">
     <?php if (!empty($offres_paginees)): ?>
-      <?php foreach ($offres_paginees as $offre):
+      <?php foreach ($offres_paginees as $index =>$offre):
         $entreprise = $entrepriseModel->avoirParID($offre['id_entreprise']);
+        $checkboxId = 'checkbox-' . $index;
       ?>
         <div class="w-layout-cell cell">
           <h2 class="heading-2"><?= htmlspecialchars($entreprise['nom']) ?></h2>
@@ -194,12 +195,12 @@ unset($offre);
 
           <a href="postuler.php?id=<?= $offre['id_offre'] ?>" class="button-2 w-button">Postuler</a>
         
-          <label for="checkbox" class="toggle">
+          <label for="<?= $checkboxId ?>" class="toggle">
             <div class="bars"></div>
             <div class="bars"></div>
             <div class="bars"></div>
           </label>
-          <input type="checkbox" id="checkbox" class="hidden-checkbox" />
+          <input type="checkbox" id="<?= $checkboxId ?>" class="hidden-checkbox" />
 
           
           <div class="modifsupp">
