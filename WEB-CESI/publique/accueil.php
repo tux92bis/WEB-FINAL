@@ -13,11 +13,12 @@ $entrepriseModel = new Entreprise($bdd);
 $favorisModel = new Favoris($bdd);
 
 $offres_par_page = 4;
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-if ($page < 1) $page = 1;
+$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+if ($page < 1)
+  $page = 1;
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-  
+
   if (!empty($_GET['search'])) {
     $filtres['search'] = $_GET['search'];
   }
@@ -25,10 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $filtres['base_remuneration'] = (float) $_GET['base_remuneration'];
   }
   if (!empty($_GET['Type'])) {
-      $filtres['type'] = $_GET['Type'];
+    $filtres['type'] = $_GET['Type'];
   }
   if (!empty($_GET['domaine']) && is_array($_GET['domaine'])) {
-      $filtres['domaine'] = $_GET['domaine'];
+    $filtres['domaine'] = $_GET['domaine'];
   }
 }
 
@@ -78,6 +79,27 @@ unset($offre);
   <script>
     !function (o, c) { var n = c.documentElement, t = " w-mod-"; n.className += t + "js", ("ontouchstart" in o || o.DocumentTouch && c instanceof DocumentTouch) && (n.className += t + "touch") }(window, document);
   </script>
+  <script>
+    function ajouterFavori(button, idOffre) {
+      fetch('ajouterFavori.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'id_offre=' + idOffre
+      })
+        .then(response => {
+          if (response.ok) {
+            // Inverser l'état de l'étoile
+            if (button.textContent === '☆') {
+              button.textContent = '★';
+            } else {
+              button.textContent = '☆';
+            }
+          }
+        });
+    }
+  </script>
 </head>
 
 <body class="body">
@@ -111,7 +133,7 @@ unset($offre);
               <?php endif; ?>
             </nav>
           </div>
-          
+
           <img src="images/generic-avatar.svg" loading="lazy" width="36" alt="" class="image">
         </div>
       </div>
@@ -137,11 +159,11 @@ unset($offre);
         <div class="price-display">
           <span id="priceValue"><?= htmlspecialchars($_GET['base_remuneration'] ?? 500, ENT_QUOTES) ?></span> €
         </div>
-        <input type="range" id="base_remuneration" name="base_remuneration" min="0" max="2000" 
-              value="<?= htmlspecialchars($_GET['base_remuneration'] ?? 1000, ENT_QUOTES) ?>" step="10"
-              oninput="document.getElementById('priceValue').textContent = this.value">
+        <input type="range" id="base_remuneration" name="base_remuneration" min="0" max="2000"
+          value="<?= htmlspecialchars($_GET['base_remuneration'] ?? 1000, ENT_QUOTES) ?>" step="10"
+          oninput="document.getElementById('priceValue').textContent = this.value">
       </div>
-    
+
 
       <fieldset>
         <legend>Type de contrat</legend>
@@ -176,10 +198,10 @@ unset($offre);
   </aside>
   <div class="w-layout-layout offres wf-layout-layout">
     <?php if (!empty($offres_paginees)): ?>
-      <?php foreach ($offres_paginees as $index =>$offre):
+      <?php foreach ($offres_paginees as $index => $offre):
         $entreprise = $entrepriseModel->avoirParID($offre['id_entreprise']);
         $checkboxId = 'checkbox-' . $index;
-      ?>
+        ?>
         <div class="w-layout-cell cell">
           <h2 class="heading-2"><?= htmlspecialchars($entreprise['nom']) ?></h2>
           <img src="images/bandeau-offre.png" loading="lazy" alt="" class="image-5">
@@ -194,7 +216,7 @@ unset($offre);
           </div>
 
           <a href="postuler.php?id=<?= $offre['id_offre'] ?>" class="button-2 w-button">Postuler</a>
-        
+
           <label for="<?= $checkboxId ?>" class="toggle">
             <div class="bars"></div>
             <div class="bars"></div>
@@ -202,7 +224,7 @@ unset($offre);
           </label>
           <input type="checkbox" id="<?= $checkboxId ?>" class="hidden-checkbox" />
 
-          
+
           <div class="modifsupp">
             <a href="modifier-offre.php?id=<?= $offre['id_offre'] ?>">Modifier</a>
             <form method="post" action="supprimer-offre.php" style="display:inline;">
@@ -213,12 +235,9 @@ unset($offre);
 
 
 
-          <form method="post" action="ajouterFavori.php" style="display:inline;">
-            <input type="hidden" name="id_offre" value="<?= $offre['id_offre'] ?>">
-            <button type="submit" class="favoris-btn">
-              <?= $offre['est_favori'] ? '★' : '☆' ?>
-            </button>
-          </form>
+          <button onclick="ajouterFavori(this, <?= $offre['id_offre'] ?>)" class="favoris-btn">
+            <?= $offre['est_favori'] ? '★' : '☆' ?>
+          </button>
         </div>
       <?php endforeach; ?>
     <?php else: ?>
@@ -227,27 +246,27 @@ unset($offre);
   </div>
   <div class="pagination">
     <?php if ($total_pages > 1): ?>
-        <?php if ($page > 1): ?>
-            <a href="?<?= http_build_query(array_merge($_GET, ['page' => $page - 1])) ?>">&laquo; Précédent</a>
-        <?php endif; ?>
+      <?php if ($page > 1): ?>
+        <a href="?<?= http_build_query(array_merge($_GET, ['page' => $page - 1])) ?>">&laquo; Précédent</a>
+      <?php endif; ?>
 
-        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-            <?php if ($i == $page): ?>
-                <span class="current"><?= $i ?></span>
-            <?php else: ?>
-                <a href="?<?= http_build_query(array_merge($_GET, ['page' => $i])) ?>"><?= $i ?></a>
-            <?php endif; ?>
-        <?php endfor; ?>
-
-        <?php if ($page < $total_pages): ?>
-            <a href="?<?= http_build_query(array_merge($_GET, ['page' => $page + 1])) ?>">Suivant &raquo;</a>
+      <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+        <?php if ($i == $page): ?>
+          <span class="current"><?= $i ?></span>
+        <?php else: ?>
+          <a href="?<?= http_build_query(array_merge($_GET, ['page' => $i])) ?>"><?= $i ?></a>
         <?php endif; ?>
+      <?php endfor; ?>
+
+      <?php if ($page < $total_pages): ?>
+        <a href="?<?= http_build_query(array_merge($_GET, ['page' => $page + 1])) ?>">Suivant &raquo;</a>
+      <?php endif; ?>
     <?php endif; ?>
   </div>
 
 
 
- 
+
 
 
 
@@ -263,7 +282,7 @@ unset($offre);
   </footer>
   <script>
     <?php if (!empty($_GET)): ?>
-      document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('input[name^="domaine"], input[name="Type"]').forEach(input => {
           if (input.checked) {
             input.closest('label').classList.add('active-filter');

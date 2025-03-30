@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../config/BDD.php';
-require_once __DIR__ . '/../modèles/Favoris.php';
+require_once __DIR__ . '/../modèles/favoris.php';
 
 session_start();
 if (!isset($_SESSION['user'])) {

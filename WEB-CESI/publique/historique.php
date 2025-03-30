@@ -1,34 +1,21 @@
-
 <?php
 session_start();
 require_once __DIR__ . '/../config/BDD.php';
 
-$error = '';
-$success = '';
 
-try {
-    $bdd = connexionBDD();
-    
-    if (!isset($_SESSION['user_id'])) {
-        header('Location: connexion.php');
-        exit();
-    }
+$bdd = connexionBDD();
 
-    $stmt = $bdd->prepare("
-        SELECT c.*, o.titre as offre_titre, e.nom as entreprise_nom, e.logo_path
+$stmt = $bdd->prepare("
+        SELECT c.*, o.titre as offre_titre, e.nom as entreprise_nom
         FROM Candidature c
-        INNER JOIN Offre o ON c.offre_id = o.id
-        INNER JOIN Entreprise e ON o.entreprise_id = e.id
-        WHERE c.utilisateur_id = :user_id
+        INNER JOIN OffreStage o ON c.id_offre = o.id_offre
+        INNER JOIN Entreprise e ON o.id_entreprise = e.id_entreprise
+        WHERE c.id_etudiant = :user_id
         ORDER BY c.date_candidature DESC
     ");
-    
-    $stmt->execute([':user_id' => $_SESSION['user_id']]);
-    $candidatures = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-} catch (Exception $e) {
-    $error = "Erreur lors de la récupération de l'historique: " . $e->getMessage();
-}
+$stmt->execute([':user_id' => $_SESSION['utilisateur']['id']]);
+$candidatures = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 <html lang="fr" data-wf-page="67bf1b3b07f212818b80ddf5" data-wf-site="67b49e8f9c9f8a910dad1bec">
@@ -39,17 +26,17 @@ try {
   <meta content="candidature" property="og:title">
   <meta content="candidature" property="twitter:title">
   <meta content="width=device-width, initial-scale=1" name="viewport">
-  
+
   <link href="css/normalize.css" rel="stylesheet" type="text/css">
   <link href="css/style.css" rel="stylesheet" type="text/css">
   <link href="css/stage-horizon.css" rel="stylesheet" type="text/css">
-  
+
   <script>
-    !function(o, c) {
+    !function (o, c) {
       var n = c.documentElement,
-          t = " w-mod-";
+        t = " w-mod-";
       n.className += t + "js",
-      ("ontouchstart" in o || o.DocumentTouch && c instanceof DocumentTouch) && (n.className += t + "touch")
+        ("ontouchstart" in o || o.DocumentTouch && c instanceof DocumentTouch) && (n.className += t + "touch")
     }(window, document);
   </script>
 </head>
@@ -59,19 +46,18 @@ try {
     <div data-animation="default" data-collapse="all" data-duration="400" data-easing="ease" data-easing2="ease"
       role="banner" class="navbar w-nav">
       <a href="#" class="w-nav-brand">
-        <img src="images/logo-site.png" loading="lazy" width="100"
-          sizes="(max-width: 479px) 71vw, 112.99479675292969px" alt=""
-          srcset="images/logo-site-p-500.png 500w, images/logo-site.png 577w">
+        <img src="images/logo-site.png" loading="lazy" width="100" sizes="(max-width: 479px) 71vw, 112.99479675292969px"
+          alt="" srcset="images/logo-site-p-500.png 500w, images/logo-site.png 577w">
       </a>
       <div class="menu w-container">
 
-        <nav  class="navigation">
+        <nav class="navigation">
           <a href="accueil.php" aria-current="page" class="a w--current">Accueil</a>
           <a href="favoris.php" class="favoris">Favoris</a>
           <a href="candidature.php" class="favoris">Candidatures</a>
           <a href="entreprise.php" class="favoris">Entreprises</a>
         </nav>
-        <div  class="w-nav-button">
+        <div class="w-nav-button">
           <div data-hover="false" data-delay="50" class="w-dropdown">
             <div class="compte w-dropdown-toggle">
               <div class="w-icon-dropdown-toggle"></div>
@@ -112,25 +98,21 @@ try {
       </div>
   </section>
   <footer class="pied-de-page">
-      <div class="w-layout-hflex contacts">
-        <img loading="lazy" src="images/instagram.svg" alt="" class="instagram">
-        <img loading="lazy" src="images/twitter.svg" alt="" class="twitter">
-        <img loading="lazy" src="images/linkedin.svg" alt="" class="linkedin">
-        <img loading="lazy" src="images/facebook.svg" alt="" class="facebook">
-        <img loading="lazy" src="images/youtube.svg" alt="" class="image-32">
-      </div>
-      
-      <div class="mention-l-gales">
-        © 2025 StageHorizon | Inc. Tous droits réservés CGU
-      </div>
-    </footer>
-    <script src="js/script.js" defer></script>
+    <div class="w-layout-hflex contacts">
+      <img loading="lazy" src="images/instagram.svg" alt="" class="instagram">
+      <img loading="lazy" src="images/twitter.svg" alt="" class="twitter">
+      <img loading="lazy" src="images/linkedin.svg" alt="" class="linkedin">
+      <img loading="lazy" src="images/facebook.svg" alt="" class="facebook">
+      <img loading="lazy" src="images/youtube.svg" alt="" class="image-32">
+    </div>
 
-  
+    <div class="mention-l-gales">
+      © 2025 StageHorizon | Inc. Tous droits réservés CGU
+    </div>
+  </footer>
+  <script src="js/script.js" defer></script>
+
+
 </body>
 
 </html>
-  
-
-
-
