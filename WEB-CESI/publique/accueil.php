@@ -12,6 +12,10 @@ $offreModel = new OffreStage($bdd);
 $entrepriseModel = new Entreprise($bdd);
 $favorisModel = new Favoris($bdd);
 
+$offres_par_page = 4;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+if ($page < 1) $page = 1;
+
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
   
   if (!empty($_GET['search'])) {
@@ -28,9 +32,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
   }
 }
 
-$offres = $offreModel->offresFiltrees($filtres);
+$toutes_offres = $offreModel->offresFiltrees($filtres);
 
-foreach ($offres as &$offre) {
+$total_offres = count($toutes_offres);
+$total_pages = ceil($total_offres / $offres_par_page);
+
+if ($page > $total_pages && $total_pages > 0) {
+  $page = $total_pages;
+}
+
+$offres_paginees = array_slice($toutes_offres, ($page - 1) * $offres_par_page, $offres_par_page);
+
+foreach ($offres_paginees as &$offre) {
   $offre['type'] = $offre['type'] ?? 'Non spécifié';
 
   if (!empty($offre['date_de_debut']) && !empty($offre['date_de_fin'])) {
@@ -49,6 +62,8 @@ foreach ($offres as &$offre) {
   }
 }
 unset($offre);
+
+
 ?>
 
 <html lang="fr" data-wf-page="67b49e8f9c9f8a910dad1bf7" data-wf-site="67b49e8f9c9f8a910dad1bec">
@@ -160,8 +175,8 @@ unset($offre);
     </form>
   </aside>
   <div class="w-layout-layout offres wf-layout-layout">
-    <?php if (!empty($offres)): ?>
-      <?php foreach ($offres as $offre):
+    <?php if (!empty($offres_paginees)): ?>
+      <?php foreach ($offres_paginees as $offre):
         $entreprise = $entrepriseModel->avoirParID($offre['id_entreprise']);
       ?>
         <div class="w-layout-cell cell">
@@ -178,7 +193,7 @@ unset($offre);
           </div>
 
           <a href="postuler.php?id=<?= $offre['id_offre'] ?>" class="button-2 w-button">Postuler</a>
-         <!-- Toggle menu -->
+        
           <label for="checkbox" class="toggle">
             <div class="bars"></div>
             <div class="bars"></div>
@@ -186,7 +201,7 @@ unset($offre);
           </label>
           <input type="checkbox" id="checkbox" class="hidden-checkbox" />
 
-          <!-- Menu modif/supp -->
+          
           <div class="modifsupp">
             <a href="modifier-offre.php?id=<?= $offre['id_offre'] ?>">Modifier</a>
             <form method="post" action="supprimer-offre.php" style="display:inline;">
@@ -209,19 +224,31 @@ unset($offre);
       <p>Aucun résultat trouvé pour : "<?= htmlspecialchars($_GET['search']) ?>"</p>
     <?php endif; ?>
   </div>
+  <div class="pagination">
+    <?php if ($total_pages > 1): ?>
+        <?php if ($page > 1): ?>
+            <a href="?<?= http_build_query(array_merge($_GET, ['page' => $page - 1])) ?>">&laquo; Précédent</a>
+        <?php endif; ?>
+
+        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+            <?php if ($i == $page): ?>
+                <span class="current"><?= $i ?></span>
+            <?php else: ?>
+                <a href="?<?= http_build_query(array_merge($_GET, ['page' => $i])) ?>"><?= $i ?></a>
+            <?php endif; ?>
+        <?php endfor; ?>
+
+        <?php if ($page < $total_pages): ?>
+            <a href="?<?= http_build_query(array_merge($_GET, ['page' => $page + 1])) ?>">Suivant &raquo;</a>
+        <?php endif; ?>
+    <?php endif; ?>
+  </div>
+
+
 
  
 
-  <div class="pagination">
-    <a href="#">&laquo;</a>
-    <a  class="active" href="#">1</a>
-    <a href="#">2</a>
-    <a href="#">3</a>
-    <a href="#">4</a>
-    <a href="#">5</a>
-    <a href="#">6</a>
-    <a href="#">&raquo;</a>
-  </div>
+
 
   <footer class="pied-de-page">
     <div class="w-layout-hflex contacts">
