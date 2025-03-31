@@ -6,20 +6,10 @@ class OffreStageTest extends TestCase
     private $bdd;
     private $offreStage;
 
-    protected function setUp(): void
+    public function connexionBDD(): void
     {
-        $this->bdd = new PDO("sqlite::memory:");
-        // Créer les tables nécessaires
-        $this->bdd->exec("CREATE TABLE OffreStage (
-            id_offre INTEGER PRIMARY KEY AUTOINCREMENT,
-            titre TEXT NOT NULL,
-            description TEXT,
-            date_debut TEXT,
-            date_fin TEXT,
-            type TEXT,
-            base_remuneration REAL
-        )");
-        
+        require_once __DIR__ . '/../config/BDD.php';
+        $this->bdd = connexionBDD();
         $this->offreStage = new OffreStage($this->bdd);
     }
 

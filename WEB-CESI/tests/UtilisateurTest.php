@@ -6,21 +6,13 @@ class UtilisateurTest extends TestCase
     private $bdd;
     private $utilisateur;
 
-    protected function setUp(): void
+    public function connexionBDD(): void
     {
-        $this->bdd = new PDO("sqlite::memory:");
-        // Créer les tables nécessaires pour les tests
-        $this->bdd->exec("CREATE TABLE Utilisateur (
-            id_utilisateur INTEGER PRIMARY KEY AUTOINCREMENT,
-            nom TEXT NOT NULL,
-            prenom TEXT NOT NULL,
-            email TEXT NOT NULL UNIQUE,
-            mot_de_passe TEXT NOT NULL,
-            role TEXT NOT NULL
-        )");
-        
+        require_once __DIR__ . '/../config/BDD.php';
+        $this->bdd = connexionBDD();
         $this->utilisateur = new Utilisateur($this->bdd);
     }
+        
 
     public function testCreationUtilisateur()
     {

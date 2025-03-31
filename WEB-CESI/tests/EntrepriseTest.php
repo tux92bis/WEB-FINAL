@@ -6,21 +6,6 @@ class EntrepriseTest extends TestCase
     private $bdd;
     private $entreprise;
 
-    protected function setUp(): void
-    {
-        $this->bdd = new PDO("sqlite::memory:");
-        // Créer les tables nécessaires pour les tests
-        $this->bdd->exec("CREATE TABLE Entreprise (
-            id_entreprise INTEGER PRIMARY KEY AUTOINCREMENT,
-            nom TEXT NOT NULL,
-            secteur TEXT,
-            localisation TEXT,
-            description TEXT
-        )");
-        
-        $this->entreprise = new Entreprise($this->bdd);
-    }
-
     public function testAjoutEntreprise()
     {
         $data = [

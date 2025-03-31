@@ -9,6 +9,22 @@ class Entreprise
         $this->bdd = $bdd;
     }
 
+    public function ajouterEntreprise($data)
+    {
+        $sql = "INSERT INTO Entreprise (nom, secteur, localisation, description) 
+                VALUES (:nom, :secteur, :localisation, :description)";
+
+        $stmt = $this->bdd->prepare($sql);
+        $stmt->execute([
+            ':nom' => $data['nom'],
+            ':secteur' => $data['secteur'],
+            ':localisation' => $data['localisation'],
+            ':description' => $data['description']
+        ]);
+
+        return $this->bdd->lastInsertId();
+    }
+
     public function avoirParID($id)
     {
         $stmt = $this->bdd->prepare("SELECT * FROM Entreprise WHERE id_entreprise = ?");
@@ -16,7 +32,6 @@ class Entreprise
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // Récupérer toutes les entreprises
     public function toutesLesEntreprises()
     {
         $sql = "SELECT e.*, 
@@ -30,7 +45,6 @@ class Entreprise
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Récupérer les offres d'une entreprise
     public function offresEntreprise($id_entreprise)
     {
         $sql = "SELECT o.*, e.nom as nom_entreprise
@@ -43,7 +57,6 @@ class Entreprise
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Rechercher des entreprises
     public function rechercherEntreprises($recherche)
     {
         $sql = "SELECT * FROM Entreprise 
@@ -56,7 +69,6 @@ class Entreprise
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Obtenir les statistiques d'une entreprise
     public function statistiquesEntreprise($id_entreprise)
     {
         $sql = "SELECT 
