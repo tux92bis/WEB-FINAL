@@ -128,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <h4>Ajouter votre entreprise</h4>
       <div class="w-layout-layout wf-layout-layout">
 
-        <div class="w-layout-cell">
+        <div class="w-layout-cell1">
           <div class="w-form">
             <form id="email-form-1" name="email-form" method="get" class="form-2">
               <label for="name">Nom :</label>
@@ -137,7 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </div>
         </div>
 
-        <div class="w-layout-cell">
+        <div class="w-layout-cell1">
           <div class="w-form">
             <form id="email-form-2" name="email-form" method="get" class="form-2">
               <label for="phone">Téléphone :</label>
@@ -146,7 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </div>
         </div>
 
-        <div class="w-layout-cell">
+        <div class="w-layout-cell1">
           <div class="w-form">
             <form id="email-form-3" name="email-form" method="get" class="form-2">
               <label for="address">Adresse :</label>
@@ -155,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </div>
         </div>
 
-        <div class="w-layout-cell">
+        <div class="w-layout-cell1">
           <div class="w-form">
             <form id="email-form-4" name="email-form" method="get" class="form-2">
               <label for="siret">N° SIRET :</label>
@@ -164,7 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </div>
         </div>
 
-        <div class="w-layout-cell">
+        <div class="w-layout-cell1">
           <div class="w-form">
             <form id="email-form-5" name="email-form" method="get" class="form-2">
               <label for="effectif">Effectif :</label>
@@ -173,7 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </div>
         </div>
 
-        <div class="w-layout-cell">
+        <div class="w-layout-cell1">
           <div class="w-form">
             <form id="email-form-6" name="email-form" method="get" class="form-2">
               <label for="code-ape">Code APE :</label>
@@ -182,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </div>
         </div>
 
-        <div class="w-layout-cell">
+        <div class="w-layout-cell1">
           <div class="w-form">
             <form id="email-form-7" name="email-form" method="get" class="form-2">
               <label for="email">Email :</label>
