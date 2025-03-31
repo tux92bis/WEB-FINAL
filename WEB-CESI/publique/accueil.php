@@ -90,7 +90,7 @@ unset($offre);
       })
         .then(response => {
           if (response.ok) {
-            // Inverser l'état de l'étoile
+            
             if (button.textContent === '☆') {
               button.textContent = '★';
             } else {

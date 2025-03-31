@@ -626,10 +626,7 @@ html, body {
   padding-left: 10px;
 }
 
-.localisation {
-  position: relative;
-  right: -900px;
-}
+
 
 .text-block-2 {
   font-weight: 700;
@@ -1015,17 +1012,21 @@ html, body {
   margin-left: 10px;
 }
 
-.icone-localisation {
-  position: relative;
-  left: 800px;
+.localisation {
+  display: flex;
+  align-items: center; 
+  gap: 5px;
+  margin-top: -28px; 
 }
 
-.localisation {
-  position:absolute;
-  bottom: 44px;
-  top: 33px;
-  left: 720px;
+.localisation img {
+  width: 5px; 
+  height: auto;
 }
+
+
+
+
 
 .text-field-4 {
   border-radius: 12px;

@@ -83,34 +83,40 @@ try {
   <section class="bandeau">
     <h1 class="slogan">Votre avenir commence ici !</h1>
   </section>
+  
+  <div class="w-layout-grid grid">
+    <?php if (!empty($entreprises)): ?>
+      <?php foreach ($entreprises as $entreprise): ?>
+        <div class="w-layout-cell cell-5">
+          <h2 class="heading-2"><?= htmlspecialchars($entreprise['nom']) ?></h2>
+          <img src="images/bandeau-offre.png" loading="lazy" alt="" class="image-5">
 
-  <section class="offre">
-    <img src="images/generic-avatar.svg" loading="lazy" width="54" alt="" class="image-4">
-    <img src="images/map-pin.png" loading="lazy" alt="" class="localisation">
-    <div class="text-block-2">Localisation</div>
-    <img src="images/bandeau-offre.png" loading="lazy" alt="" class="image-30">
-    <h2 class="nom-entreprise">Nom entreprise</h2>
-    <a href="#" class="afficher-offres w-button">Afficher offres</a>
-    <p class="informations"><strong>Informations </strong>: lor sit amet, consectetur adipiscing elit. Suspendisse
-      varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut
-      commodo diam libero vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae
-      risus tristique posuer</p>
-    <div class="contact">
-      <a id="exe" href="mailto:exemple@gmail.com?subject=exemple%40gmail.com" class="link">exemple@gmail.com</a>
-      <a href="tel:010203040506" class="link-2">0102030405</a>
-      <img src="images/phone.png" loading="lazy" alt="" class="image-22">
-      <img src="images/mail.png" loading="lazy" alt="" class="image-21">
-    </div>
-    <p>Évaluez l'entreprise :</p>
-    <div id="stars">
-      <button class="star">☆</button>
-      <button class="star">☆</button>
-      <button class="star">☆</button>
-      <button class="star">☆</button>
-    </div>
-    <p id="note"></p>
+          <div class="text-block-2">
+            <img src="images/map-pin.png" loading="lazy" alt="" class="localisation">
+            <?= htmlspecialchars($entreprise['localisation']) ?>
+          </div>
 
-  </section>
+          <p class="paragraph"><?= htmlspecialchars($entreprise['description']) ?></p>
+
+          <div class="info-entreprise">
+            <p><strong>Secteur d'activité :</strong> <?= htmlspecialchars($entreprise['secteur']) ?></p>
+            <p><strong>Nombre d'offres :</strong> <?= htmlspecialchars($entreprise['nombre_offres']) ?></p>
+            <?php if ($entreprise['moyenne_notes']): ?>
+              <p><strong>Note :</strong> <?= number_format($entreprise['moyenne_notes'], 1) ?>/5</p>
+            <?php endif; ?>
+          </div>
+
+          <a href="offre.php?entreprise=<?= $entreprise['id_entreprise'] ?>" class="button-2 w-button">
+            Voir les offres
+          </a>
+        </div>
+      <?php endforeach; ?>
+    <?php else: ?>
+      <p>Aucune entreprise trouvée.</p>
+    <?php endif; ?>
+  </div>
+
+  
 
   <footer class="pied-de-page">
     <div class="w-layout-hflex contacts">
@@ -127,35 +133,3 @@ try {
 </body>
 
 </html>
-
-<div class="w-layout-grid grid">
-  <?php if (!empty($entreprises)): ?>
-    <?php foreach ($entreprises as $entreprise): ?>
-      <div class="w-layout-cell cell-5">
-        <h2 class="heading-2"><?= htmlspecialchars($entreprise['nom']) ?></h2>
-        <img src="images/bandeau-offre.png" loading="lazy" alt="" class="image-5">
-
-        <div class="text-block-2">
-          <img src="images/map-pin.png" loading="lazy" alt="" class="localisation">
-          <?= htmlspecialchars($entreprise['localisation']) ?>
-        </div>
-
-        <p class="paragraph"><?= htmlspecialchars($entreprise['description']) ?></p>
-
-        <div class="info-entreprise">
-          <p><strong>Secteur d'activité :</strong> <?= htmlspecialchars($entreprise['secteur']) ?></p>
-          <p><strong>Nombre d'offres :</strong> <?= htmlspecialchars($entreprise['nombre_offres']) ?></p>
-          <?php if ($entreprise['moyenne_notes']): ?>
-            <p><strong>Note :</strong> <?= number_format($entreprise['moyenne_notes'], 1) ?>/5</p>
-          <?php endif; ?>
-        </div>
-
-        <a href="offre.php?entreprise=<?= $entreprise['id_entreprise'] ?>" class="button-2 w-button">
-          Voir les offres
-        </a>
-      </div>
-    <?php endforeach; ?>
-  <?php else: ?>
-    <p>Aucune entreprise trouvée.</p>
-  <?php endif; ?>
-</div>
