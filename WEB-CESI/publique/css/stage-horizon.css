@@ -358,6 +358,18 @@ html, body {
   margin-left: 260px;
 
 }
+.entreprises{
+  grid-column-gap: 0px;
+  grid-row-gap: 30px;
+  text-align: center;
+  object-fit: fill;
+  border-radius: 20px;
+  width: 70%;
+  height: auto;
+  position: relative;
+  margin-top: 20px;
+  margin-left: 260px;
+}
 
 .cell {
   border: 1px solid #000;

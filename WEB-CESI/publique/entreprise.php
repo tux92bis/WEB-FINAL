@@ -77,14 +77,11 @@ try {
     </div>
   </header>
 
-
-
-
   <section class="bandeau">
     <h1 class="slogan">Votre avenir commence ici !</h1>
   </section>
   
-  <div class="w-layout-grid grid">
+  <div class="w-layout-layout entreprises wf-layout-layout">
     <?php if (!empty($entreprises)): ?>
       <?php foreach ($entreprises as $entreprise): ?>
         <div class="w-layout-cell cell-5">
