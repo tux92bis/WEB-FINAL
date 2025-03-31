@@ -2,21 +2,37 @@
 session_start();
 require_once __DIR__ . '/../config/BDD.php';
 
+// Vérifier si l'utilisateur est connecté
+if (!isset($_SESSION['user']) || !isset($_SESSION['user']['id_utilisateur'])) {
+  header('Location: connexion.php');
+  exit();
+}
 
 $bdd = connexionBDD();
 
-$stmt = $bdd->prepare("
-        SELECT c.*, o.titre as offre_titre, e.nom as entreprise_nom
+// Récupérer l'ID de l'étudiant
+$stmt = $bdd->prepare("SELECT id_etudiant FROM Etudiant WHERE id_utilisateur = ?");
+$stmt->execute([$_SESSION['user']['id_utilisateur']]);
+$etudiant = $stmt->fetch();
+
+if ($etudiant) {
+  // Récupérer les candidatures avec les informations de l'offre et de l'entreprise
+  $stmt = $bdd->prepare("
+        SELECT c.*, o.titre, o.type, o.base_remuneration,
+               e.nom as nom_entreprise, e.localisation,
+               DATE_FORMAT(c.date_candidature, '%d/%m/%Y') as date_formatee
         FROM Candidature c
         INNER JOIN OffreStage o ON c.id_offre = o.id_offre
         INNER JOIN Entreprise e ON o.id_entreprise = e.id_entreprise
-        WHERE c.id_etudiant = :user_id
+        WHERE c.id_etudiant = :id_etudiant
         ORDER BY c.date_candidature DESC
     ");
 
-$stmt->execute([':user_id' => $_SESSION['utilisateur']['id']]);
-$candidatures = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+  $stmt->execute([':id_etudiant' => $etudiant['id_etudiant']]);
+  $candidatures = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} else {
+  $candidatures = [];
+}
 ?>
 <html lang="fr" data-wf-page="67bf1b3b07f212818b80ddf5" data-wf-site="67b49e8f9c9f8a910dad1bec">
 
@@ -54,7 +70,7 @@ $candidatures = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <nav class="navigation">
           <a href="accueil.php" aria-current="page" class="a w--current">Accueil</a>
           <a href="favoris.php" class="favoris">Favoris</a>
-          <a href="candidature.php" class="favoris">Candidatures</a>
+          <a href="historique.php" class="favoris">Candidatures</a>
           <a href="entreprise.php" class="favoris">Entreprises</a>
         </nav>
         <div class="w-nav-button">
@@ -79,23 +95,31 @@ $candidatures = $stmt->fetchAll(PDO::FETCH_ASSOC);
   </section>
   <section>
     <div class="contenu">
-      <h1>storique</h1>
-      <div class="offre-card">
-        <div class="offre-title">Développeur Web</div>
-        <div class="offre-info">Date de postulation : 27/03/2025</div>
-      </div>
-      <div class="offre-card">
-        <div class="offre-title">Développeur Web</div>
-        <div class="offre-info">Date de postulation : 27/03/2025</div>
-      </div>
-      <div class="offre-card">
-        <div class="offre-title">Développeur Web</div>
-        <div class="offre-info">Date de postulation : 27/03/2025</div>
-      </div>
-      <div class="offre-card">
-        <div class="offre-title">Développeur Web</div>
-        <div class="offre-info">Date de postulation : 27/03/2025</div>
-      </div>
+      <h1>Historique des candidatures</h1>
+      <?php if (!empty($candidatures)): ?>
+        <?php foreach ($candidatures as $candidature): ?>
+          <div class="offre-card">
+            <div class="offre-title"><?= htmlspecialchars($candidature['titre']) ?></div>
+            <div class="offre-info">
+              <p><strong>Entreprise :</strong> <?= htmlspecialchars($candidature['nom_entreprise']) ?></p>
+              <p><strong>Localisation :</strong> <?= htmlspecialchars($candidature['localisation']) ?></p>
+              <p><strong>Type :</strong> <?= htmlspecialchars($candidature['type']) ?></p>
+              <p><strong>Rémunération :</strong> <?= htmlspecialchars($candidature['base_remuneration']) ?>€</p>
+              <p><strong>Date de candidature :</strong> <?= htmlspecialchars($candidature['date_formatee']) ?></p>
+              <?php if ($candidature['cv']): ?>
+                <p><a href="<?= htmlspecialchars($candidature['cv']) ?>" target="_blank">Voir le CV</a></p>
+              <?php endif; ?>
+              <?php if ($candidature['lettre_motivation']): ?>
+                <p><a href="<?= htmlspecialchars($candidature['lettre_motivation']) ?>" target="_blank">Voir la lettre de
+                    motivation</a></p>
+              <?php endif; ?>
+            </div>
+          </div>
+        <?php endforeach; ?>
+      <?php else: ?>
+        <p class="no-candidatures">Vous n'avez pas encore postulé à des offres.</p>
+      <?php endif; ?>
+    </div>
   </section>
   <footer class="pied-de-page">
     <div class="w-layout-hflex contacts">

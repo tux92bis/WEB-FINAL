@@ -6,13 +6,14 @@ class UtilisateurTest extends TestCase
     private $bdd;
     private $utilisateur;
 
-    public function connexionBDD(): void
+    protected function setUp(): void
     {
-        require_once __DIR__ . '/../config/BDD.php';
+        require_once __DIR__ . '/../WEB-CESI/config/BDD.php';
+        require_once __DIR__ . '/../WEB-CESI/modèles/utilisateur.php';
         $this->bdd = connexionBDD();
         $this->utilisateur = new Utilisateur($this->bdd);
     }
-        
+
 
     public function testCreationUtilisateur()
     {
@@ -26,7 +27,7 @@ class UtilisateurTest extends TestCase
 
         $id = $this->utilisateur->creerUtilisateur($data);
         $this->assertNotNull($id);
-        
+
         $user = $this->utilisateur->avoirParID($id);
         $this->assertEquals($data['email'], $user['email']);
     }
@@ -35,7 +36,7 @@ class UtilisateurTest extends TestCase
     {
         $email = 'test@test.com';
         $this->assertFalse($this->utilisateur->emailExists($email));
-        
+
         $this->utilisateur->creerUtilisateur([
             'nom' => 'Test',
             'prenom' => 'User',
@@ -43,7 +44,7 @@ class UtilisateurTest extends TestCase
             'mot_de_passe' => 'test123',
             'role' => 'etudiant'
         ]);
-        
+
         $this->assertTrue($this->utilisateur->emailExists($email));
     }
 }

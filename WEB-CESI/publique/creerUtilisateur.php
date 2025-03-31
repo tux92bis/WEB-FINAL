@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 
   
-                $userId = $userModel->createUser([
+                $userId = $userModel->creerUtilisateur([
                     'nom' => $nom,
                     'prenom' => $prenom,
                     'email' => $email,
