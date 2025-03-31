@@ -123,75 +123,77 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <h1 class="slogan">Votre avenir commence ici !</h1>
   </section>
 
-  <section class="creer-entreprise">
-    <h2>Ajouter votre entreprise</h2>
-    <div class="w-layout-layout wf-layout-layout">
+  <section>
+    <div class="form-container">
+      <h4>Ajouter votre entreprise</h4>
+      <div class="w-layout-layout wf-layout-layout">
 
-      <div class="w-layout-cell">
-        <div class="w-form">
-          <form id="email-form-1" name="email-form" method="get" class="form-2">
-            <label for="name">Nom :</label>
-            <input class="text-field w-input" maxlength="256" name="name" placeholder="Ex: THALES" type="text" id="name" required>
-          </form>
+        <div class="w-layout-cell">
+          <div class="w-form">
+            <form id="email-form-1" name="email-form" method="get" class="form-2">
+              <label for="name">Nom :</label>
+              <input class="text-field w-input" maxlength="256" name="name" placeholder="Ex: THALES" type="text" id="name" required>
+            </form>
+          </div>
         </div>
-      </div>
 
-      <div class="w-layout-cell">
-        <div class="w-form">
-          <form id="email-form-2" name="email-form" method="get" class="form-2">
-            <label for="phone">Téléphone :</label>
-            <input class="text-field w-input" maxlength="256" name="phone" placeholder="Ex: 0102030405" type="text" id="phone" required>
-          </form>
+        <div class="w-layout-cell">
+          <div class="w-form">
+            <form id="email-form-2" name="email-form" method="get" class="form-2">
+              <label for="phone">Téléphone :</label>
+              <input class="text-field w-input" maxlength="256" name="phone" placeholder="Ex: 0102030405" type="text" id="phone" required>
+            </form>
+          </div>
         </div>
-      </div>
 
-      <div class="w-layout-cell">
-        <div class="w-form">
-          <form id="email-form-3" name="email-form" method="get" class="form-2">
-            <label for="address">Adresse :</label>
-            <input class="text-field w-input" maxlength="256" name="address" placeholder="Ex: 1 rue de l'église" type="text" id="address" required>
-          </form>
+        <div class="w-layout-cell">
+          <div class="w-form">
+            <form id="email-form-3" name="email-form" method="get" class="form-2">
+              <label for="address">Adresse :</label>
+              <input class="text-field w-input" maxlength="256" name="address" placeholder="Ex: 1 rue de l'église" type="text" id="address" required>
+            </form>
+          </div>
         </div>
-      </div>
 
-      <div class="w-layout-cell">
-        <div class="w-form">
-          <form id="email-form-4" name="email-form" method="get" class="form-2">
-            <label for="siret">N° SIRET :</label>
-            <input class="text-field w-input" maxlength="256" name="siret" placeholder="Ex: 0102030405" type="text" id="siret" required>
-          </form>
+        <div class="w-layout-cell">
+          <div class="w-form">
+            <form id="email-form-4" name="email-form" method="get" class="form-2">
+              <label for="siret">N° SIRET :</label>
+              <input class="text-field w-input" maxlength="256" name="siret" placeholder="Ex: 0102030405" type="text" id="siret" required>
+            </form>
+          </div>
         </div>
-      </div>
 
-      <div class="w-layout-cell">
-        <div class="w-form">
-          <form id="email-form-5" name="email-form" method="get" class="form-2">
-            <label for="effectif">Effectif :</label>
-            <input class="text-field w-input" maxlength="256" name="effectif" placeholder="Ex: 100" type="text" id="effectif" required>
-          </form>
+        <div class="w-layout-cell">
+          <div class="w-form">
+            <form id="email-form-5" name="email-form" method="get" class="form-2">
+              <label for="effectif">Effectif :</label>
+              <input class="text-field w-input" maxlength="256" name="effectif" placeholder="Ex: 100" type="text" id="effectif" required>
+            </form>
+          </div>
         </div>
-      </div>
 
-      <div class="w-layout-cell">
-        <div class="w-form">
-          <form id="email-form-6" name="email-form" method="get" class="form-2">
-            <label for="code-ape">Code APE :</label>
-            <input class="text-field w-input" maxlength="256" name="code-ape" placeholder="Ex: 1234Z" type="text" id="code-ape" required>
-          </form>
+        <div class="w-layout-cell">
+          <div class="w-form">
+            <form id="email-form-6" name="email-form" method="get" class="form-2">
+              <label for="code-ape">Code APE :</label>
+              <input class="text-field w-input" maxlength="256" name="code-ape" placeholder="Ex: 1234Z" type="text" id="code-ape" required>
+            </form>
+          </div>
         </div>
-      </div>
 
-      <div class="w-layout-cell">
-        <div class="w-form">
-          <form id="email-form-7" name="email-form" method="get" class="form-2">
-            <label for="email">Email :</label>
-            <input class="text-field w-input" maxlength="256" name="email" placeholder="Ex: exemple@email.com" type="email" id="email" required>
-          </form>
+        <div class="w-layout-cell">
+          <div class="w-form">
+            <form id="email-form-7" name="email-form" method="get" class="form-2">
+              <label for="email">Email :</label>
+              <input class="text-field w-input" maxlength="256" name="email" placeholder="Ex: exemple@email.com" type="email" id="email" required>
+            </form>
+          </div>
         </div>
-      </div>
 
-      <a href="#" class="ajouter w-button">Ajouter</a>
-     
+        <a href="#" class="ajouter w-button">Ajouter</a>
+      
+      </div>
     </div>
   </section>
   <footer class="pied-de-page">

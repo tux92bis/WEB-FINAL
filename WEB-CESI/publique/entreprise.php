@@ -11,7 +11,6 @@ $success = '';
 $bdd = connexionBDD();
 $entrepriseModel = new Entreprise($bdd);
 
-// Récupérer toutes les entreprises avec leurs offres et statistiques
 $sql = "SELECT e.*, 
         (SELECT COUNT(*) FROM OffreStage WHERE id_entreprise = e.id_entreprise) as nombre_offres,
         (SELECT AVG(note) FROM Entreprise WHERE id_entreprise = e.id_entreprise) as moyenne_notes
