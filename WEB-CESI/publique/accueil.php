@@ -124,13 +124,11 @@ unset($offre);
               <div>Compte</div>
             </div>
             <nav class="w-dropdown-list">
-              <?php if (isset($_SESSION['utilisateur']['role']) && $_SESSION['utilisateur']['role'] === 'admin'): ?>
+  
                 <a href="creerEntreprise.php" class="dropdown-link w-dropdown-link">Ajouter une entreprise</a>
                 <a href="creerUtilisateur.php" class="dropdown-link-2 w-dropdown-link">Ajouter un utilisateur</a>
                 <a href="creerOffre.php" class="dropdown-link-3 w-dropdown-link">Ajouter une offre</a>
-              <?php else: ?>
-                <div class="dropdown-link w-dropdown-link text-muted">Accès réservé aux administrateurs</div>
-              <?php endif; ?>
+           
             </nav>
           </div>
 
