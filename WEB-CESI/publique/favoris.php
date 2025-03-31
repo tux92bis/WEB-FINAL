@@ -6,13 +6,23 @@ require_once __DIR__ . '/../modèles/offreStage.php';
 require_once __DIR__ . '/../modèles/favoris.php';
 require_once __DIR__ . '/../modèles/entreprise.php';
 
-
 $bdd = connexionBDD();
+$favoris = [];
 
+error_log("Session dans favoris.php : " . print_r($_SESSION, true));
 
+// Vérifier si l'utilisateur est connecté
+if (!isset($_SESSION['user']) || !isset($_SESSION['user']['id_utilisateur'])) {
+  header('Location: connexion.php');
+  exit();
+}
+
+// Récupération de l'ID étudiant
 $stmt = $bdd->prepare("SELECT id_etudiant FROM Etudiant WHERE id_utilisateur = ?");
-$stmt->execute([$_SESSION['utilisateur']['id']]);
+$stmt->execute([$_SESSION['user']['id_utilisateur']]);
 $etudiant = $stmt->fetch();
+
+error_log("ID étudiant trouvé : " . print_r($etudiant, true));
 
 if ($etudiant) {
   $sql = "SELECT o.*, e.nom as nom_entreprise, e.description as description_entreprise,
@@ -27,6 +37,11 @@ if ($etudiant) {
     $stmt->execute([':id_etudiant' => $etudiant['id_etudiant']]);
     $favoris = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    error_log("Requête SQL exécutée : " . $sql);
+    error_log("Paramètres : id_etudiant = " . $etudiant['id_etudiant']);
+    error_log("Nombre de favoris trouvés : " . count($favoris));
+    error_log("Favoris : " . print_r($favoris, true));
+
     foreach ($favoris as &$offre) {
       if (!empty($offre['date_de_debut']) && !empty($offre['date_de_fin'])) {
         $debut = new DateTime($offre['date_de_debut']);
@@ -40,8 +55,11 @@ if ($etudiant) {
     unset($offre);
 
   } catch (PDOException $e) {
+    error_log("Erreur SQL dans favoris.php: " . $e->getMessage());
     $favoris = [];
   }
+} else {
+  error_log("Aucun étudiant trouvé pour l'utilisateur ID: " . $_SESSION['user']['id_utilisateur']);
 }
 ?>
 
@@ -133,6 +151,28 @@ if ($etudiant) {
     <div class="mention-l-gales">© 2025 StageHorizon | Inc. Tous droits réservés CGU</div>
   </footer>
   <script src="js/script.js" defer></script>
+  <script>
+    function supprimerFavori(idOffre) {
+      fetch('../contrôlleurs/ajouterFavori.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'id_offre=' + idOffre
+      })
+        .then(response => {
+          if (response.ok) {
+            location.reload();
+          } else {
+            throw new Error('Erreur lors de la suppression du favori');
+          }
+        })
+        .catch(error => {
+          console.error('Erreur:', error);
+          alert('Erreur lors de la suppression du favori');
+        });
+    }
+  </script>
 </body>
 
 </html>

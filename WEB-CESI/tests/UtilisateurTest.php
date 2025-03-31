@@ -24,10 +24,10 @@ class UtilisateurTest extends TestCase
             'role' => 'etudiant'
         ];
 
-        $id = $this->utilisateur->createUser($data);
+        $id = $this->utilisateur->creerUtilisateur($data);
         $this->assertNotNull($id);
         
-        $user = $this->utilisateur->getUserById($id);
+        $user = $this->utilisateur->avoirParID($id);
         $this->assertEquals($data['email'], $user['email']);
     }
 
@@ -36,7 +36,7 @@ class UtilisateurTest extends TestCase
         $email = 'test@test.com';
         $this->assertFalse($this->utilisateur->emailExists($email));
         
-        $this->utilisateur->createUser([
+        $this->utilisateur->creerUtilisateur([
             'nom' => 'Test',
             'prenom' => 'User',
             'email' => $email,
