@@ -27,13 +27,12 @@ class OffreStageTest extends TestCase
         $id = $this->offreStage->creerOffre($data);
         $this->assertNotNull($id);
         
-        $offre = $this->offreStage->getOffreById($id);
+        $offre = $this->offreStage->avoirParID($id);
         $this->assertEquals($data['titre'], $offre['titre']);
     }
 
     public function testFiltreOffres()
     {
-        // Ajouter quelques offres de test
         $this->offreStage->creerOffre([
             'titre' => 'Stage PHP',
             'type' => 'Stage',
