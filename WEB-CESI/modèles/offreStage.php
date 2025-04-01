@@ -10,9 +10,9 @@ class OffreStage
 
     public function creerOffre($data)
     {
-        $sql = "INSERT INTO OffreStage (titre, description, date_debut, date_fin, type, base_remuneration, id_entreprise, mineure) 
-                VALUES (:titre, :description, :date_debut, :date_fin, :type, :base_remuneration, :id_entreprise, :mineure)";
-
+        $sql = "INSERT INTO OffreStage (titre, description, date_debut, date_fin, type, base_remuneration, id_entreprise, id_pilote, id_admin) 
+                VALUES (:titre, :description, :date_debut, :date_fin, :type, :base_remuneration, :id_entreprise, :id_pilote, :id_admin)";
+        
         $stmt = $this->bdd->prepare($sql);
         $stmt->execute([
             ':titre' => $data['titre'],
@@ -22,9 +22,10 @@ class OffreStage
             ':type' => $data['type'],
             ':base_remuneration' => $data['base_remuneration'],
             ':id_entreprise' => $data['id_entreprise'],
-            ':mineure' => $data['mineure'] ?? null
+            ':id_pilote' => $data['id_pilote'],
+            ':id_admin' => $data['id_admin']
         ]);
-
+        
         return $this->bdd->lastInsertId();
     }
 

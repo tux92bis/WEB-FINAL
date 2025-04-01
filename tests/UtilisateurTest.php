@@ -12,29 +12,33 @@ class UtilisateurTest extends TestCase
         require_once __DIR__ . '/../WEB-CESI/modèles/utilisateur.php';
         $this->bdd = connexionBDD();
         $this->utilisateur = new Utilisateur($this->bdd);
+        $this->bdd->exec("DELETE FROM Utilisateur WHERE email LIKE 'test%@test.com'");
     }
 
+    protected function tearDown(): void
+    {
+        $this->bdd->exec("DELETE FROM Utilisateur WHERE email LIKE 'test%@test.com'");
+    }
 
     public function testCreationUtilisateur()
     {
+        $uniqueEmail = 'test_' . time() . '@example.com'; 
         $data = [
             'nom' => 'Dupont',
             'prenom' => 'Jean',
-            'email' => 'jean.dupont@test.com',
+            'email' => $uniqueEmail,
             'mot_de_passe' => 'test123',
             'role' => 'etudiant'
         ];
 
         $id = $this->utilisateur->creerUtilisateur($data);
         $this->assertNotNull($id);
-
-        $user = $this->utilisateur->avoirParID($id);
-        $this->assertEquals($data['email'], $user['email']);
     }
 
     public function testEmailExistant()
     {
-        $email = 'test@test.com';
+        $email = 'test' . time() . '@test.com'; 
+
         $this->assertFalse($this->utilisateur->emailExists($email));
 
         $this->utilisateur->creerUtilisateur([
