@@ -105,36 +105,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <h1 class="slogan">Votre avenir commence ici !</h1>
   </section>
 
-  <section class="section">
+  <section>
     <img src="images/generic-avatar.svg" loading="lazy" alt="" class="image-4">
-    <img src="images/map-pin.png" loading="lazy" alt="" class="localisation">
-    <div class="text-block-2"><?= htmlspecialchars($offre['localisation']) ?></div>
-    <h2 class="titre-offre"><?= htmlspecialchars($offre['nom_entreprise']) ?> - <?= htmlspecialchars($offre['titre']) ?>
-    </h2>
 
-    <div class="w-form">
+
+    <div class="form-container">
+    <h4><?= htmlspecialchars($offre['nom_entreprise']) ?> - <?= htmlspecialchars($offre['titre']) ?>
+    </h4>
       <form id="email-form" name="email-form" method="POST" enctype="multipart/form-data">
-        <label for="name" class="nom">Prénom</label>
-        <input class="text-field-4 w-input" maxlength="256" name="name" data-name="Name" placeholder="Jean" type="text"
-          id="name" required="">
+        <div class="form-grid">
+          <div class="form-row">
+            <label for="name" class="nom">Prénom</label>
+            <input class="text-field-4 w-input" maxlength="256" name="name" data-name="Name" placeholder="Jean" type="text"
+            id="name" required="">
+            <label for="name-5" class="field-label-3">Nom</label>
+            <input class="text-field-4 w-input" maxlength="256" name="name-5" data-name="Name 5" placeholder="Dupont"
+            type="text" id="name-5" required="">
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="form-row">
+            <label class="field-label-4">Téléphone</label>
+            <input class="telephone-label w-input" maxlength="256" name="name-3" data-name="Name 3" placeholder="0102030405"
+            type="text" id="name-3" required="">
+            <label class="field-label-4">Adresse mail</label>
+            <input class="text-field-4 w-input" maxlength="256" name="name-4" data-name="Name 4"
+            placeholder="Exemple@viacesi.fr" type="text" id="name-4" required="">
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="form-row">
+            <label for="cv" class="field-label-4depot">CV (format PDF)</label>
+            <input  type="file" name="cv" id="cv" accept=".pdf" required="">
 
-        <label class="telephone">Téléphone</label>
-        <input class="telephone-label w-input" maxlength="256" name="name-3" data-name="Name 3" placeholder="0102030405"
-          type="text" id="name-3" required="">
+            <label for="lettre" class="field-label-4depot">Lettre de motivation (format PDF)</label>
+            <input  type="file" name="lettre" id="lettre" accept=".pdf" required="">
+          </div>
+        </div>
 
-        <label for="name-5" class="field-label-3">Nom</label>
-        <input class="text-field-4 w-input" maxlength="256" name="name-5" data-name="Name 5" placeholder="Dupont"
-          type="text" id="name-5" required="">
-
-        <label class="field-label-4">Adresse mail</label>
-        <input class="text-field-4 w-input" maxlength="256" name="name-4" data-name="Name 4"
-          placeholder="Exemple@viacesi.fr" type="text" id="name-4" required="">
-
-        <label for="cv" class="field-label-4">CV (format PDF)</label>
-        <input class="text-field-4 w-input" type="file" name="cv" id="cv" accept=".pdf" required="">
-
-        <label for="lettre" class="field-label-4">Lettre de motivation (format PDF)</label>
-        <input class="text-field-4 w-input" type="file" name="lettre" id="lettre" accept=".pdf" required="">
 
         <label class="w-checkbox checkbox-field-2">
           <input type="checkbox" id="checkbox" name="checkbox" data-name="Checkbox" required=""

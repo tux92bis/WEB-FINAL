@@ -465,9 +465,7 @@ html, body {
   color: white;
   text-decoration: none;
   font-weight: bold;
-  position: absolute;
-  bottom: 10px;
-  right: 9px;
+
 
 }
 
@@ -1084,11 +1082,6 @@ html, body {
   width: 20%;
   margin-bottom: 40px;
   margin-left: 60px;
-  position:absolute;
-  top: 26%;
-  left: 400px;
-
-
 }
 
 .submit-button-2 {
@@ -1104,6 +1097,11 @@ html, body {
 .field-label-5 {
   position: relative;
   left: 60px;
+}
+.field-label-4depot{
+  position: relative;
+  left: 42px;
+
 }
 
 .cv {
@@ -1682,11 +1680,11 @@ input[type="range"]::-moz-range-thumb {
   }
 }
 
-/* Style pour les champs requis */
+/* Style pour les champs requis 
 input:required, textarea:required {
   border-left: 3px solid #e53e3e;
   padding-left: 12px;
-}
+}*/
 
 /* Style général */
 .date-selection-container {
@@ -1882,6 +1880,7 @@ input:required, textarea:required {
   border-radius: 8px;
   font-size: 15px;
 }
+
 
 /* Responsive */
 @media (max-width: 600px) {
