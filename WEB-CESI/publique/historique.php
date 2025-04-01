@@ -20,7 +20,7 @@ if ($etudiant) {
   $stmt = $bdd->prepare("
         SELECT c.*, o.titre, o.type, o.base_remuneration,
                e.nom as nom_entreprise, e.localisation,
-               DATE_FORMAT(c.date_candidature, '%d/%m/%Y') as date_formatee
+               strftime('%d/%m/%Y', c.date_candidature) as date_formatee
         FROM Candidature c
         INNER JOIN OffreStage o ON c.id_offre = o.id_offre
         INNER JOIN Entreprise e ON o.id_entreprise = e.id_entreprise

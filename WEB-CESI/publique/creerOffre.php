@@ -74,9 +74,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <div class="menu w-container">
 
         <nav  class="navigation">
-          <a href="accueil.html" aria-current="page" class="a w--current">Accueil</a>
+          <a href="accueil.php" aria-current="page" class="a w--current">Accueil</a>
           <a href="favoris.php" class="favoris">Favoris</a>
-          <a href="candidature.php" class="favoris">Candidatures</a>
+          <a href="historique.php" class="favoris">Candidatures</a>
           <a href="entreprise.php" class="favoris">Entreprises</a>
         </nav>
         <div  class="w-nav-button">
