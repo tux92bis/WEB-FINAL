@@ -4,18 +4,34 @@ require_once __DIR__ . '/../config/BDD.php';
 
 $error = '';
 $success = '';
+$offres_paginees = [];
+$offres_par_entreprise = []; // This will group offers by enterprise
 
 try {
     $bdd = connexionBDD();
     
+    // Query to get all offers with enterprise information
     $stmt = $bdd->prepare("
         SELECT o.*, e.nom as entreprise_nom, e.logo_path
-        FROM Offre o
-        INNER JOIN Entreprise e ON o.entreprise_id = e.id
-        ORDER BY o.date_debut DESC
+        FROM OffreStage o
+        INNER JOIN Entreprise e ON o.id_entreprise = e.id_entreprise
+        ORDER BY e.nom, o.date_debut DESC
     ");
     $stmt->execute();
     $offres = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Group offers by enterprise
+    foreach ($offres as $offre) {
+        $entreprise_id = $offre['id_entreprise'];
+        if (!isset($offres_par_entreprise[$entreprise_id])) {
+            $offres_par_entreprise[$entreprise_id] = [
+                'entreprise_nom' => $offre['entreprise_nom'],
+                'logo_path' => $offre['logo_path'],
+                'offres' => []
+            ];
+        }
+        $offres_par_entreprise[$entreprise_id]['offres'][] = $offre;
+    }
 
     if (isset($_SESSION['user_id'])) {
         if (isset($_POST['add_favori'])) {
@@ -47,8 +63,6 @@ try {
 } catch (Exception $e) {
     $error = "Erreur lors de la récupération des offres: " . $e->getMessage();
 }
-
-
 ?>
 <html lang="fr" data-wf-page="67bf0b02b89e8d9fc73fa4f9" data-wf-site="67b49e8f9c9f8a910dad1bec">
 
@@ -65,73 +79,59 @@ try {
 </head>
 
 <body class="body-2">
-  <header>
-    <div data-animation="default" data-collapse="all" data-duration="400" data-easing="ease" data-easing2="ease"
-      role="banner" class="navbar w-nav">
-      <a href="#" class="w-nav-brand">
-        <img src="images/logo-site.png" loading="lazy" width="100"
-          sizes="(max-width: 479px) 71vw, 112.99479675292969px" alt=""
-          srcset="images/logo-site-p-500.png 500w, images/logo-site.png 577w">
-      </a>
-      <div class="menu w-container">
-
-        <nav  class="navigation">
-          <a href="accueil.php" aria-current="page" class="a w--current">Accueil</a>
-          <a href="favoris.php" class="favoris">Favoris</a>
-          <a href="offre.php" class="favoris">Offres de stage</a>
-          <a href="candidature.php" class="favoris">Candidatures</a>
-          <a href="entreprise.php" class="favoris">Entreprises</a>
-        </nav>
-        <div  class="w-nav-button">
-          <div data-hover="false" data-delay="50" class="w-dropdown">
-            <div class="compte w-dropdown-toggle">
-              <div class="w-icon-dropdown-toggle"></div>
-              <div> Compte</div>
-            </div>
-            <nav class="w-dropdown-list">
-              <a href="creerOffre.php" class="dropdown-link w-dropdown-link">Ajouter une offre</a>
-              <a href="creerUtilisateur.php" class="dropdown-link-2 w-dropdown-link">Ajouter un utilisateur</a>
-              <a href="creerEntreprise.php" class="dropdown-link-3 w-dropdown-link">Ajouter une entreprise</a>
-            </nav>
-          </div><img src="images/generic-avatar.svg" loading="lazy" width="36" alt="" class="image">
-        </div>
-      </div>
-    </div>
-  </header>
 
 
   <section class="bandeau">
     <h1 class="slogan"> Votre avenir commence ici !</h1>
   </section>
+  <div class="w-layout-layout offres wf-layout-layout">
+    <?php if (!empty($offres_paginees)): ?>
+      <?php foreach ($offres_paginees as $index => $offre):
+        $entreprise = $entrepriseModel->avoirParID($offre['id_entreprise']);
+        $checkboxId = 'checkbox-' . $index;
+        ?>
+        <div class="w-layout-cell cell">
+          <h2 class="heading-2"><?= htmlspecialchars($offre['entreprise_nom']) ?></h2>
+          <img src="images/bandeau-offre.png" loading="lazy" alt="" class="image-5">
+          <h3><?= htmlspecialchars($offre['titre']) ?></h3>
+          <p class="paragraph"><?= htmlspecialchars($offre['description']) ?></p>
 
-  <section class="offre">
-    <img width="54" loading="lazy" alt="" src="images/generic-avatar.svg" class="image-4">
-    <img loading="lazy" src="images/map-pin.png" alt="" class="localisation">
-    <div class="text-block-2">Localisation</div><img loading="lazy" src="images/bandeau-offre.png" alt=""
-      class="image-30">
-    <h2 class="nom-entreprise offre">Nom entreprise</h2>
+          <div class="offre-details">
+            <p><strong>Type:</strong> <?= htmlspecialchars($offre['type']) ?></p>
+            <p><strong>Rémunération:</strong> <?= $offre['base_remuneration'] ?>€</p>
+            <p><strong>Dates:</strong> Avril 2025 - Juin 2025</p>
+            <p><strong>Domaine:</strong> <?= htmlspecialchars($offre['mineure']) ?></p>
+          </div>
 
-    <p class="informations">
-      <strong>Informations </strong>: lor sit amet, consectetur adipiscing elit. Suspendisse
-      varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut
-      commodo diam libero vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae
-      risus tristique posuer </p>
-    <ul class="comp-tences">
-      <li class="list-item">Compétences</li>
-      <li class="list-item">Compétences</li>
-      <li class="list-item">Compétences</li>
-      <li class="list-item">Compétences</li>
-    </ul>
-    <ul class="list objectifs">
-      <li class="list-item">Objectifs</li>
-      <li class="list-item">Objectifs</li>
-      <li class="list-item">Objectifs</li>
-      <li class="list-item">Objectifs</li>
-    </ul>
-    <div>
-      <a href="condidature.html" class="afficher-offres-1 w-button">Postuler</a>
-    </div>
-  </section>
+          <a href="postuler.php?id=<?= $offre['id_offre'] ?>" class="button-2 w-button">Postuler</a>
+
+          <label for="<?= $checkboxId ?>" class="toggle">
+            <div class="bars"></div>
+            <div class="bars"></div>
+            <div class="bars"></div>
+          </label>
+          <input type="checkbox" id="<?= $checkboxId ?>" class="hidden-checkbox" />
+
+
+          <div class="modifsupp">
+            <a href="modifier-offre.php?id=<?= $offre['id_offre'] ?>">Modifier</a>
+            <form method="post" action="supprimer-offre.php" style="display:inline;">
+              <input type="hidden" name="id_offre" value="<?= $offre['id_offre'] ?>">
+              <button type="submit" class="btn-supprimer">Supprimer</button>
+            </form>
+          </div>
+          <button onclick="ajouterFavori(this, <?= $offre['id_offre'] ?>)" class="favoris-btn">
+          <?= in_array($offre['id_offre'], $favoris ?? []) ? '★' : '☆' ?>
+
+          </button>
+        </div>
+      <?php endforeach; ?>
+    <?php else: ?>
+      <p>Aucun résultat trouvé pour : "<?= htmlspecialchars($_GET['search']) ?>"</p>
+    <?php endif; ?>
+  </div>
+
+
   <footer class="pied-de-page">
     <div class="w-layout-hflex contacts"><img loading="lazy" src="images/instagram.svg" alt="" class="instagram"><img
         loading="lazy" src="images/twitter.svg" alt="" class="twitter"><img loading="lazy" src="images/linkedin.svg"
