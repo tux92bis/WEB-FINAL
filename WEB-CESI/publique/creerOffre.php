@@ -102,19 +102,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <h1 class="slogan"> Votre avenir commence ici !</h1>
   </section>
 
-  <section class="section">
-    <h2 class="heading-4">Ajouter une offre</h2>
+  <section class="form-container">
+    <h3 class="heading-4">Ajouter une offre</h3>
     <div class="w-form">
       <form id="email-form" name="email-form" data-name="Email Form" method="get" data-wf-page-id="67c038fa0fbf3721b579cd1d" data-wf-element-id="2b8a853b-7f0b-5137-ddc7-ea3cb87ac0e5">
+
+        <div class="form-grid">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="intitule">Intitulé</label>
+              <input type="text" id="intitule" name="intitule" required>
+            </div>
+            <div class="form-group">
+              <label for="localisation">Localisation</label>
+              <input type="text" id="localisation" name="localisation" required>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="date-selection-container">
+              <h3 class="section-title">Dates du stage/alternance</h3>
+  
+              <div class="date-picker-container">
+                <div class="date-range-selector">
+                  <div class="date-input-group">
+                    <label>Date de début</label>
+                    <input type="date" class="date-input" id="start-date">
+                  </div>
+                  
+                  <div class="date-input-group">
+                    <label>Date de fin</label>
+                    <input type="date" class="date-input" id="end-date">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="form-group">
+              <label for="gratification">Gratification</label>
+              <input type="text" id="gratification" name="gratification">
+            </div>
+          </div>
+        </div>
         <textarea required="" placeholder="Description du stage" maxlength="5000" id="field" name="field" data-name="Field" class="textarea w-input"></textarea>
-        <label for="email" class="field-label-6">Intitulé</label>
-        <input class="text-field-5 w-input" maxlength="256" name="email" data-name="Email" placeholder="" type="email" id="email" required="">
-        <label class="field-label-7">Localisation</label>
-        <input class="text-field-5 w-input" maxlength="256" name="email-4" data-name="Email 4" placeholder="" type="email" id="email-4" required="">
-        <label class="field-label-8">Dates du stage/alternance</label>
-        <input class="text-field-5 w-input" maxlength="256" name="email-3" data-name="Email 3" placeholder="" type="email" id="email-3" required="">
-        <label class="field-label-9">Gratification</label>
-        <input class="text-field-5 w-input" maxlength="256" name="email-2" data-name="Email 2" placeholder="" type="email" id="email-2" required="">
+
         <input type="submit" data-wait="Please wait..." class="submit-button-3 w-button" value="Publier">
       </form>
     </div>

@@ -191,9 +191,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </div>
         </div>
 
-        <a href="#" class="ajouter w-button">Ajouter</a>
       
       </div>
+      
+      <a href="#" class="ajouter w-button">Ajouter</a>
     </div>
   </section>
   <footer class="pied-de-page">
