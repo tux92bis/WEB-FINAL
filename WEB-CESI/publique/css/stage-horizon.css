@@ -1299,11 +1299,13 @@ html, body {
  
 }
 .btn {
-  background-color: transparent;
-  position: relative;
-  border: none;
-  top: -275px;
-  right: -414px;
+
+  cursor: pointer;
+  position: absolute;
+  right: 26px;
+  top: 20px;
+  transition: color 0.3s ease;
+
 
 
 }
@@ -1888,4 +1890,13 @@ input:required, textarea:required {
     flex-direction: column;
     gap: 10px;
   }
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap; 
+  gap: 20px;
+  padding: 15px;
+  overflow-x: auto; 
+  scrollbar-width: thin;
 }

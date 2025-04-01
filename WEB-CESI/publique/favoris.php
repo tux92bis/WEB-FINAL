@@ -80,7 +80,7 @@ if ($etudiant) {
   <script>!function (o, c) { var n = c.documentElement, t = " w-mod-"; n.className += t + "js", ("ontouchstart" in o || o.DocumentTouch && c instanceof DocumentTouch) && (n.className += t + "touch") }(window, document);</script>
 </head>
 
-<body class="body-2">
+<body>
   <header>
     <div data-animation="default" data-collapse="all" data-duration="400" data-easing="ease" data-easing2="ease"
       role="banner" class="navbar w-nav">
@@ -112,10 +112,13 @@ if ($etudiant) {
       </div>
     </div>
   </header>
-  <div class="w-layout-grid grid">
+  <section class="bandeau">
+    <h1 class="slogan">Votre avenir commence ici !</h1>
+  </section>
+  <div class=" grid">
     <?php if (!empty($favoris)): ?>
       <?php foreach ($favoris as $offre): ?>
-        <div class="w-layout-cell cell-5">
+        <div class="w-layout-cell cell">
           <h2 class="heading-2"><?= htmlspecialchars($offre['nom_entreprise']) ?></h2>
           <img src="images/bandeau-offre.png" loading="lazy" alt="" class="image-5">
           <h3><?= htmlspecialchars($offre['titre']) ?></h3>

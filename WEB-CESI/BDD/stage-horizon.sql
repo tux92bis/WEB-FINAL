@@ -98,7 +98,7 @@ INSERT INTO Utilisateur (id_utilisateur, nom, prenom, email, mot_de_passe, role)
 (4, 'Dubois', 'Marie', 'marie.dubois@ecole.fr', 'pilote456', 'pilote'),
 (5, 'Moreau', 'Thomas', 'thomas.moreau@ecole.fr', 'pilote789', 'pilote'),
 -- Étudiants
-(6, 'Bernard', 'Lucas', 'lucas.bernard@ecole.fr', 'etud123', 'etudiant'),
+(6, 'Bernard', 'Lucas', 'lucas.bernard@ecole.fr',', 'etudiant'),
 (7, 'Petit', 'Emma', 'emma.petit@ecole.fr', 'etud456', 'etudiant'),
 (8, 'Robert', 'Hugo', 'hugo.robert@ecole.fr', 'etud789', 'etudiant'),
 (9, 'Richard', 'Léa', 'lea.richard@ecole.fr', 'etud012', 'etudiant'),
