@@ -80,25 +80,35 @@ unset($offre);
     !function (o, c) { var n = c.documentElement, t = " w-mod-"; n.className += t + "js", ("ontouchstart" in o || o.DocumentTouch && c instanceof DocumentTouch) && (n.className += t + "touch") }(window, document);
   </script>
   <script>
-    function ajouterFavori(button, idOffre) {
-      fetch('Favori.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: 'id_offre=' + idOffre
-      })
-        .then(response => {
-          if (response.ok) {
-            
-            if (button.textContent === '☆') {
-              button.textContent = '★';
-            } else {
-              button.textContent = '☆';
-            }
-          }
-        });
+function ajouterFavori(button, idOffre) {
+  fetch('../contrôlleurs/ajouterFavori.php', {  /
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: 'id_offre=' + idOffre
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Erreur HTTP ' + response.status);
     }
+    return response.text();
+  })
+  .then(data => {
+    console.log('Réponse du serveur:', data); // débogage
+    if (data.trim() === 'added') {
+      button.textContent = '★';
+    } else if (data.trim() === 'removed') {
+      button.textContent = '☆';
+    } else {
+      throw new Error('Réponse inattendue: ' + data);
+    }
+  })
+  .catch(error => {
+    console.error('Erreur:', error);
+    alert('Erreur lors de la mise à jour du favori: ' + error.message);
+  });
+}
   </script>
 </head>
 
