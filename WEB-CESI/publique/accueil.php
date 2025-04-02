@@ -81,7 +81,7 @@ unset($offre);
   </script>
   <script>
     function ajouterFavori(button, idOffre) {
-      fetch('ajouterFavori.php', {
+      fetch('Favori.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -221,15 +221,15 @@ unset($offre);
             <div class="bars"></div>
           </label>
           <input type="checkbox" id="<?= $checkboxId ?>" class="hidden-checkbox" />
-
-
           <div class="modifsupp">
-            <a href="modifier-offre.php?id=<?= $offre['id_offre'] ?>">Modifier</a>
-            <form method="post" action="supprimer-offre.php" style="display:inline;">
-              <input type="hidden" name="id_offre" value="<?= $offre['id_offre'] ?>">
-              <button type="submit" class="btn-supprimer">Supprimer</button>
-            </form>
+              <a href="modifier-offre.php?id=<?= $offre['id_offre'] ?>">Modifier</a>
+              <form method="post" action="contrôlleurs/supprimerOffre.php" style="display:inline;" onsubmit="return supprimerOffre(this);">
+                  <input type="hidden" name="id_offre" value="<?= $offre['id_offre'] ?>">
+                  <button type="submit" class="btn-supprimer">Supprimer</button>
+              </form>
           </div>
+
+
 
 
 

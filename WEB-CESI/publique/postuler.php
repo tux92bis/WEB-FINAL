@@ -22,28 +22,57 @@ if (!$offre) {
   header('Location: accueil.php');
   exit();
 }
+// [...] (le début de votre fichier postuler.php reste inchangé)
 
 // Traitement du formulaire si soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   try {
     // Récupérer l'ID étudiant
     $stmt = $bdd->prepare("SELECT id_etudiant FROM Etudiant WHERE id_utilisateur = ?");
-    $stmt->execute([$_SESSION['utilisateur']['id']]);
+    $stmt->execute([$_SESSION['user']['id_utilisateur']]); // Note: j'ai corrigé la clé de session
     $etudiant = $stmt->fetch();
 
     if ($etudiant) {
-      // Insérer la candidature
-      $stmt = $bdd->prepare("INSERT INTO Candidature (id_etudiant, id_offre, date_candidature) VALUES (?, ?, CURRENT_TIMESTAMP)");
-      $stmt->execute([$etudiant['id_etudiant'], $_GET['id']]);
+      // MODIFICATION ICI - Nouveau code d'insertion avec fichiers
+      $stmt = $bdd->prepare("INSERT INTO Candidature 
+                            (id_etudiant, id_offre, date_candidature, cv, lettre_motivation) 
+                            VALUES (?, ?, CURRENT_TIMESTAMP, ?, ?)");
+
+      // Traitement des fichiers uploadés
+      $cvPath = uploadFile($_FILES['cv'], 'cv');
+      $lmPath = uploadFile($_FILES['lettre_motivation'], 'lm');
+
+      $stmt->execute([
+          $etudiant['id_etudiant'], 
+          $_GET['id'],
+          $cvPath,
+          $lmPath
+      ]);
 
       $_SESSION['success'] = "Votre candidature a été envoyée avec succès !";
       header('Location: accueil.php');
       exit();
     }
   } catch (Exception $e) {
-    $error = "Une erreur est survenue lors de l'envoi de votre candidature.";
+    $error = "Une erreur est survenue lors de l'envoi de votre candidature: " . $e->getMessage();
   }
 }
+
+// AJOUTER LA FONCTION UPLOADFILE À LA FIN DU FICHIER
+function uploadFile($file, $prefix) {
+    if ($file['error'] === UPLOAD_ERR_OK) {
+        $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+        $filename = $prefix . '_' . uniqid() . '.' . $ext;
+        $uploadDir = __DIR__ . '/../uploads/'; // Chemin relatif au dossier parent
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+        move_uploaded_file($file['tmp_name'], $uploadDir . $filename);
+        return 'uploads/' . $filename; // Chemin relatif pour le stockage en BDD
+    }
+    return null;
+}
+
 ?>
 
 <html lang="fr" data-wf-page="67bf248277d7dea90311558a" data-wf-site="67b49e8f9c9f8a910dad1bec">
@@ -135,11 +164,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
         <div class="form-grid">
           <div class="form-row">
-            <label for="cv" class="field-label-4depot">CV (format PDF)</label>
-            <input  type="file" name="cv" id="cv" accept=".pdf" required="">
-
-            <label for="lettre" class="field-label-4depot">Lettre de motivation (format PDF)</label>
-            <input  type="file" name="lettre" id="lettre" accept=".pdf" required="">
+            <form method="post" enctype="multipart/form-data">
+              <input type="file" name="cv" accept=".pdf,.doc,.docx">
+              <input type="file" name="lettre_motivation" accept=".pdf,.doc,.docx">
+              <button type="submit" class="button-2 w-button">Postuler</button>
+            </form>         
+  
           </div>
         </div>
 
@@ -156,7 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <span class="w-form-label">J&#x27;autorise le destinataire à stocker et traiter mes informations personnelles
             dans le cadre de ma candidature</span>
         </label>
-        <input type="submit" data-wait="Please wait..." class="button-2 w-button" value="Envoyer">
+
       </form>
     </div>
   </section>

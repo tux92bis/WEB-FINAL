@@ -83,6 +83,25 @@ class OffreStage
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+    public function supprimerOffre($id_offre) {
+        try {
+            // Debug: Vérifiez que l'ID est reçu
+            error_log("Tentative de suppression de l'offre ID: " . $id_offre);
+            
+            $stmt = $this->bdd->prepare("DELETE FROM OffreStage WHERE id_offre = ?");
+            $result = $stmt->execute([$id_offre]);
+            
+            // Debug: Vérifiez le résultat
+            error_log("Résultat suppression: " . ($result ? "succès" : "échec"));
+            error_log("Lignes affectées: " . $stmt->rowCount());
+            
+            return $result && $stmt->rowCount() > 0;
+        } catch (PDOException $e) {
+            error_log("Erreur PDO: " . $e->getMessage());
+            return false;
+        }
+    }
+
 
 }
 ?>
